@@ -25,3 +25,10 @@ logs
 
 # VSC
 .history
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Other
+public/robots.txt

@@ -18,7 +18,7 @@ export default defineAppConfig({
     title: "",
     to: "/",
     logo: {
-      alt: "",
+      alt: "Osmi",
       light: "/img/logo-white.png",
       dark: "/img/logo-dark.png",
     },

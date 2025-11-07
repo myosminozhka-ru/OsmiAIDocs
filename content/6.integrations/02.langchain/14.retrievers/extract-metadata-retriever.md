@@ -1,7 +1,7 @@
 # Extract Metadata Retriever
 
-This retriever is designed to automatically extract keywords from query. The extracted JSON output is used as metadata filter for vector store.
+Этот ретривер предназначен для автоматического извлечения ключевых слов из запроса. Полученный JSON-вывод используется как фильтр метаданных для векторного хранилища.
 
-For example, when we ask a question: "What is the profit for Apple", LLM will give an output of `{source: "apple"}`, and this will be passed to vectore store's metadata filter.
+Пример:Когда мы задаём вопрос: «Какова прибыль Apple?», модель языковой модели (LLM) выдаст результат вида `{source: "apple"}`, который затем передается в качестве фильтра метаданных для поиска в векторном хранилище.
 
-<figure><img src="/assets/image (5) (6).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(6\).png)

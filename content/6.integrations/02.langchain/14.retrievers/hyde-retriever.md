@@ -1,11 +1,11 @@
 ---
-description: Use HyDE retriever to retrieve from a vector store.
+description: Используйте HyDE-ретривер для поиска в векторном хранилище.
 ---
 
 # HyDE Retriever
 
-<figure><img src="/assets/image (143).png" alt="" width="302"><figcaption><p>HyDE Retriever Node</p></figcaption></figure>
+![](/assets/image%20\(143\).png){width="302"}
 
-{% hint style="info" %}
-This section is a work in progress. We appreciate any help you can provide in completing this section. Please check our [Contribution Guide](broken-reference) to get started.
-{% endhint %}
+> Этот раздел находится в стадии разработки.
+> Мы будем признательны за любую помощь в его завершении.
+> Пожалуйста, ознакомьтесь с нашим руководством по участию (Contribution Guide), чтобы начать.

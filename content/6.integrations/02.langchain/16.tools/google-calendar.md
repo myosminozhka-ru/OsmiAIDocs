@@ -1,72 +1,74 @@
 # Google Calendar
 
-## Create credential in Flowise
+## Создание учетных данных в OSMI для Google Calendar
 
-1. Add a new Google Calendar OAuth2 credential
-2. Enter a name for the credential.
-3. Copy the OAuth Redirect URL.
-4. Note that the following fields need to be filled in:
-   * Client ID
-   * Client Secret
+1. Добавить новые OAuth2-учетные данные для Google Calendar
+2. Введите название для учетных данных.
+3. Скопируйте URL-адрес перенаправления OAuth (OAuth Redirect URL).
+4. Обратите внимание, что необходимо заполнить следующие поля:
+   - Client ID
+   - Client Secret
 
-<figure><img src="/assets/image (266).png" alt="" width="422"><figcaption></figcaption></figure>
+![](/assets/image%20\(266\).png){width="422"}
 
-## Create/Use Google Project
+## Создать или использовать проект в Google
 
-1. Log in to your [**Google Cloud**](https://console.cloud.google.com/) account.
-2. Navigate to [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials), and select the project you want to use from the dropdown at the top left (or create a new project and select it).
-3. Set up the **OAuth consent screen** if you haven't configured one before.
+1. Войдите в аккаунт [**Google Cloud**](https://console.cloud.google.com/).
+2. Перейдите в [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials) и выберите существующий проект из выпадающего меню в левом верхнем углу (или создайте новый и выберите его).
+3. Настройте экран согласия OAuth, если он еще не настроен.
 
-<figure><img src="/assets/image (256).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(256\).png){width="563"}
 
-4. Go to **Credentials**, then click **+ CREATE CREDENTIALS > OAuth client ID**.
+4. Перейдите в раздел **Credentials**, нажмите + **+ CREATE CREDENTIALS > OAuth client ID**.
 
-<figure><img src="/assets/image (257).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(257\).png){width="563"}
 
-5. In the **Application type** dropdown, select **Web application**.
-6. Under **Authorized redirect URIs**, click **+ ADD URI** and paste the OAuth redirect URL copied earlier.
-7. Click **Create**.
+5. В списке **Application type** type выберите **Web application**.
+6. В разделе **Authorized redirect URIs** нажмите + **+ ADD URI** и вставьте ранее скопированный OAuth Redirect URL.
+7. Нажмите **Create**.
 
-<figure><img src="/assets/image (258).png" alt="" width="407"><figcaption></figcaption></figure>
+![](/assets/image%20\(258\).png){width="407"}
 
-8. Copy the Client ID and Client Secret:
+8. Скопируйте Client ID и Client Secret.
 
-<figure><img src="/assets/image (259).png" alt="" width="489"><figcaption></figcaption></figure>
+![](/assets/image%20\(259\).png){width="489"}
 
-9. In **Enabled APIs & Services**, click **+ ENABLE APIS AND SERVICES**.
-10. Search for and enable the **Google Calendar API**.
+9. Перейдите в раздел **Enabled APIs & Services**, нажмите + **+ ENABLE APIS AND SERVICES**.
+10. В поле поиска найдите и включите **Google Calendar API**.
 
-<figure><img src="/assets/image (270).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(270\).png){width="563"}
 
-11. Return to **Credentials**, click the newly created credential under **OAuth 2.0 Client IDs**, and on the detail page, you’ll find the **Client ID** and **Client Secret**.
+11. Вернитесь к разделу Credentials и выберите созданный OAuth 2.0 Client ID. На странице данных найдите Client ID и Client Secret.
 
-## Finish setup in Flowise
+## Завершение настройки в OSMI
 
-1. Fill in all the values copied earlier. Then click "**Authenticate**":
+1. Заполните все ранее скопированные значения в соответствующих полях.
+   Нажмите кнопку "Authenticate" (Авторизация).
 
-<figure><img src="/assets/image (267).png" alt="" width="440"><figcaption></figcaption></figure>
+![](/assets/image%20\(267\).png){width="440"}
 
-2. A Google login window will pop up:
+2. Появится окно входа в Google:
 
-<figure><img src="/assets/image (261).png" alt="" width="448"><figcaption></figcaption></figure>
+![](/assets/image%20\(261\).png){width="448"}
 
-3. Grant the permissions:
+3. Войдите в аккаунт Google и разрешите доступ.
 
-<figure><img src="/assets/image (263).png" alt="" width="373"><figcaption></figcaption></figure>
+![](/assets/image%20\(263\).png){width="373"}
 
-4. Pop up window will be closed automatically and credential will be saved and ready to be used.
+4. После этого окно автоматически закроется, и учетные данные будут сохранены и готовы к использованию.
 
-## Use as Agent Tool
+## Использование как инструмент агента (Agent Tool)
 
-Multiple actions can be selected to let the Agent intelligently choose the appropriate one.\
-Parameters can be left empty to allow the Agent to determine the values on its own. However, if the user provides values, those will override the Agent's choices.
+- Можно выбрать несколько действий, чтобы агент сам определил нужное.
+- Параметры можно оставить пустыми, чтобы агент определил их самостоятельно.
+- Если пользователь введет параметры, они заменят автоматический выбор агента.
 
-<figure><img src="/assets/image (268).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(268\).png)
 
-## Use as Tool Node
+## Использование как узла инструмента (Tool Node)
 
-It can also be used as a Tool Node in a determined workflow scenario. For example, retrieving a list of draft messages before proceeding to the next step.\
-In this mode, **Tool Input Arguments must be explicitly defined and filled with values**.\
-Unlike the [**Use as Agent Tool**](google-calendar.md#use-as-agent-tool) option, there is no Agent to automatically determine the inputs. The user must manually populate the fields, either by entering fixed values or using variables enclosed in double curly brackets `{{ }}`.
+- Также можно использовать как компонент в конкретном сценарии, например, для получения списка черновиков сообщений перед следующими операциями.
+- В этом режиме аргументы входных данных должны быть явно определены и заполнены.
+- В отличие от варианта [**Use as Agent Tool**](google-calendar#use-as-agent-tool), здесь пользователь вручную вводит значения или использует переменные в фигурных скобках `{{ }}`.
 
-<figure><img src="/assets/image (269).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(269\).png)

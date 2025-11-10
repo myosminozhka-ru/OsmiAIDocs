@@ -1,76 +1,81 @@
 # Google Drive
 
-## Create credential in Flowise
+## Создание учетных данных в OSMI для Google Drive
 
-1. Add a new Google Drive OAuth2 credential
-2. Enter a name for the credential.
-3. Copy the OAuth Redirect URL.
-4. Note that the following fields need to be filled in:
-   * Client ID
-   * Client Secret
+1. Добавить новые OAuth2-учетные данные для Google Drive.
+2. Введите название для учетных данных.
+3. Скопируйте URL-адрес перенаправления OAuth (OAuth Redirect URL).
+4. Обратите внимание, что необходимо заполнить следующие поля:
+   - Client ID
+   - Client Secret
 
-<figure><img src="/assets/image (276).png" alt="" width="425"><figcaption></figcaption></figure>
+![](</assets/image (276).png>){width="425"}
 
-## Create/Use Google Project
+## Создание или использование проекта в Google
 
-1. Log in to your [**Google Cloud**](https://console.cloud.google.com/) account.
-2. Navigate to [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials), and select the project you want to use from the dropdown at the top left (or create a new project and select it).
-3. Set up the **OAuth consent screen** if you haven't configured one before.
+1. Войдите в аккаунт [**Google Cloud**](https://console.cloud.google.com/).
+2. Перейдите в [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials), выберите проект из выпадающего меню в левом верхнем углу (или создайте новый и выберите его).
+3. Настройте экран согласия OAuth, если он еще не настроен.
 
-<figure><img src="/assets/image (256).png" alt="" width="563"><figcaption></figcaption></figure>
+![](</assets/image (256).png>){width="563"}
 
-4. Go to **Credentials**, then click **+ CREATE CREDENTIALS > OAuth client ID**.
+4. Перейдите в раздел **Credentials** и нажмите **+ CREATE CREDENTIALS > OAuth client ID**
 
-<figure><img src="/assets/image (257).png" alt="" width="563"><figcaption></figcaption></figure>
+![](</assets/image (257).png>){width="563"}
 
-5. In the **Application type** dropdown, select **Web application**.
-6. Under **Authorized redirect URIs**, click **+ ADD URI** and paste the OAuth redirect URL copied earlier.
-7. Click **Create**.
+5. В списке **Application type** type выберите **Web application**.
 
-<figure><img src="/assets/image (258).png" alt="" width="407"><figcaption></figcaption></figure>
+6. В разделе **Authorized redirect URIs** нажмите **+ ADD URI** и вставьте ранее скопированный OAuth Redirect URL.
 
-8. Copy the Client ID and Client Secret:
+7. Нажмите **Create**.
 
-<figure><img src="/assets/image (259).png" alt="" width="489"><figcaption></figcaption></figure>
+![](</assets/image (258).png>){width="407"}
 
-9. In **Enabled APIs & Services**, click **+ ENABLE APIS AND SERVICES**.
-10. Search for and enable the **Google Drive API**.
+8. Скопируйте Client ID и Client Secret:
 
-<figure><img src="/assets/image (277).png" alt="" width="550"><figcaption></figcaption></figure>
+![](</assets/image (259).png>){width="489"}
 
-11. Return to **Credentials**, click the newly created credential under **OAuth 2.0 Client IDs**, and on the detail page, you’ll find the **Client ID** and **Client Secret**.
+9. Перейдите в раздел **Enabled APIs & Services**, нажмите **+ ENABLE APIS AND SERVICES**.
 
-## Finish setup in Flowise
+10. Введите в поиск и включите **Google Drive API**.
 
-1. Fill in all the values copied earlier. Then click "**Authenticate**":
+![](</assets/image (277).png>){width="550"}
 
-<figure><img src="/assets/image (278).png" alt="" width="433"><figcaption></figcaption></figure>
+11. Вернитесь к разделу Credentials и выберите созданный **OAuth 2.0 Client IDs**. На странице данных найдите **Client ID** и **Client Secret**.
 
-2. A Google login window will pop up:
+## Завершение настройки в OSMI
 
-<figure><img src="/assets/image (261).png" alt="" width="448"><figcaption></figcaption></figure>
+1. Заполните все ранее скопированные значения в соответствующих полях. Нажмите кнопку "**Authenticate**":
 
-3. Grant the permissions:
+![](</assets/image (278).png>){width="433"}
 
-<figure><img src="/assets/image (263).png" alt="" width="373"><figcaption></figcaption></figure>
+2. Откроется окно входа в Google:
 
-4. Pop up window will be closed automatically and credential will be saved and ready to be used.
+![](</assets/image (261).png>){width="448"}
 
-## Use as Agent Tool
+3. Войдите в учетную запись Google и предоставьте разрешения:
 
-Multiple actions can be selected to let the Agent intelligently choose the appropriate one.\
-Parameters can be left empty to allow the Agent to determine the values on its own. However, if the user provides values, those will override the Agent's choices.
+![](</assets/image (263).png>){width="373"}
 
-<figure><img src="/assets/image (279).png" alt=""><figcaption></figcaption></figure>
+4. После этого окно автоматически закроется, и учетные данные будут сохранены и готовы к использованию.
 
-## Use as Tool Node
+## Использование как инструмент агента (Agent Tool)
 
-It can also be used as a Tool Node in a determined workflow scenario. For example, get a specific spreadsheet before proceeding to the next step.\
-In this mode, **Tool Input Arguments must be explicitly defined and filled with values**.\
-Unlike the [**Use as Agent Tool**](google-drive.md#use-as-agent-tool) option, there is no Agent to automatically determine the inputs. The user must manually populate the fields, either by entering fixed values or using variables enclosed in double curly brackets `{{ }}`.
+- Можно выбрать несколько действий, чтобы агент сам определил необходимое.
+- Параметры можно оставить пустыми, чтобы агент определил их самостоятельно.
+- Если пользователь введет параметры, они заменят автоматический выбор агента.
 
-<figure><img src="/assets/image (280).png" alt=""><figcaption></figcaption></figure>
+![](</assets/image (279).png>)
 
-Example PDF file created in Google Drive from above tool node:
+## Использование как узла инструмента (Tool Node)
 
-<figure><img src="/assets/image (281).png" alt=""><figcaption></figcaption></figure>
+- Также используется как компонент для выполнения конкретных операций в сценарии, например, для получения определенной таблицы или файла перед следующими шагами.
+- В этом режиме аргументы входных данных должны быть явно определены и заполнены.
+- В отличие от варианта для [агента](google-drive#use-as-agent-tool) , пользователь вручную заполняет поля, вводя фиксированные значения или используя переменные в двойных фигурных скобках `{{ }}`.
+
+![](</assets/image (280).png>)
+
+Пример: PDF-файл, созданный в Google Drive с помощью этого узла
+(Пример файла PDF, созданного с помощью вышеописанного инструмента — по необходимости вставьте здесь изображение или описание).
+
+![](</assets/image (281).png>)

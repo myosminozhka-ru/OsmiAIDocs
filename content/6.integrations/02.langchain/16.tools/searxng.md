@@ -1,18 +1,16 @@
 ---
-description: Wrapper around SearXNG - a free internet metasearch engine.
+description: Обёртка вокруг SearXNG — бесплатной метапоисковой системы в интернете.
 ---
 
 # SearXNG
 
-<figure><img src="/assets/up-011.png" alt="" width="283"><figcaption><p>SearXNG Node</p></figcaption></figure>
+![](/assets/up-011.png){width="283"}
 
-### Setup SearXNG
+### Настройка SearXNG
 
-Follow [official documentation](https://docs.searxng.org/admin/installation.html) for setting up SearXNG locally. In this case, we will be using Docker Compose to set it up.
-
-Navigate to [searxng-docker](https://github.com/searxng/searxng-docker) repository and follow the setup instructions.
-
-Make sure that you have `server.limiter` set to `false` and `json` is included in `search.formats`. These parameters can be defined in `searxng/settings.yml` :
+Следуйте официальной [документации](https://docs.searxng.org/admin/installation.html) для настройки SearXNG локально. В данном случае мы будем использовать Docker Compose для его установки.
+Перейдите в репозиторий [searxng-docker](https://github.com/searxng/searxng-docker) и следуйте инструкциям по настройке.
+Убедитесь, что в файле `searxng/settings.yml` установлено `server.limiter: false`, а в разделе `search.formats` включён формат `json`. Эти параметры можно настроить в файле `searxng/settings.yml`:
 
 ```yaml
 server:
@@ -25,10 +23,11 @@ search:
     - json
 ```
 
-`docker-compose up -d` to start the container. Open web browser and go to **http://localhost:8080/search**, you will be able to see SearXNG page.
+Запустите контейнер командой `docker-compose up -d`, откройте веб-браузер и перейдите по адресу <http://localhost:8080/search>. Там вы увидите страницу SearXNG.
 
-### Using in Flowise
+### Использование в OSMI
 
-Drag and drop SearXNG node onto canvas. Fill in the Base URL as **http://localhost:8080.** You can also specify other search parameters if needed. LLM will automatically figure out what to use for the search query question.
+Перетащите узел SearXNG на рабочее пространство. Заполните поле Base URL значением: **<http://localhost:8080>.** Также можно указать другие параметры поиска, если необходимо.
+LLM автоматически определит, что нужно искать, основываясь на вопросе пользователя.
 
-<figure><img src="/assets/image (171).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(171\).png)

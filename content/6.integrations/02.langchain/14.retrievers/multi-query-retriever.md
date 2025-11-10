@@ -1,13 +1,11 @@
 ---
-description: >-
-  Generate multiple queries from different perspectives for a given user input
-  query.
+description: Генерируйте несколько запросов с разных точек зрения на основе
+  входного пользовательского запроса.
 ---
 
 # Multi Query Retriever
 
-<figure><img src="/assets/up-006.png" alt="" width="283"><figcaption><p>Multi Query Retriever Node</p></figcaption></figure>
+![](/assets/up-006.png){width="283"}
 
-{% hint style="info" %}
-This section is a work in progress. We appreciate any help you can provide in completing this section. Please check our [Contribution Guide](broken-reference) to get started.
-{% endhint %}
+> Этот раздел находится в стадии разработки. Мы будем признательны за любую помощь в его завершении.
+> Пожалуйста, ознакомьтесь с нашим руководством по участию (Contribution Guide), чтобы начать.

@@ -1,13 +1,12 @@
 ---
-description: >-
-  Store prompt template with name & description to be later queried by
-  MultiPromptChain.
+description: Сохраняйте шаблон подсказки (prompt template) с именем и описанием
+  для последующего использования в MultiPromptChain.
 ---
 
 # Prompt Retriever
 
-<figure><img src="/assets/image (145).png" alt="" width="301"><figcaption><p>Prompt Retriever Node</p></figcaption></figure>
+![](/assets/image%20\(145\).png){width="301"}
 
-{% hint style="info" %}
-This section is a work in progress. We appreciate any help you can provide in completing this section. Please check our [Contribution Guide](broken-reference) to get started.
-{% endhint %}
+> Этот раздел находится в стадии разработки.
+> Мы будем признательны за любую помощь в его завершении.
+> Пожалуйста, ознакомьтесь с нашим руководством по участию (Contribution Guide), чтобы начать.

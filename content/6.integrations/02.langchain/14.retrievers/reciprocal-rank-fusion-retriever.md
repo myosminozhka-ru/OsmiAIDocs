@@ -1,11 +1,12 @@
 ---
-description: Reciprocal Rank Fusion to re-rank search results by multiple query generation.
+description: Reciprocal Rank Fusion — используется для повторного ранжирования
+  результатов поиска с помощью нескольких созданных запросов.
 ---
 
 # Reciprocal Rank Fusion Retriever
 
-<figure><img src="/assets/image (146).png" alt="" width="303"><figcaption><p>Reciprocal Rank Fusion Retriever Node</p></figcaption></figure>
+![](/assets/image%20\(146\).png){width="303"}
 
-{% hint style="info" %}
-This section is a work in progress. We appreciate any help you can provide in completing this section. Please check our [Contribution Guide](broken-reference) to get started.
-{% endhint %}
+> Этот раздел находится в стадии разработки.
+> Мы будем признательны за любую помощь в его завершении.
+> Пожалуйста, ознакомьтесь с нашим руководством по участию (Contribution Guide), чтобы начать.

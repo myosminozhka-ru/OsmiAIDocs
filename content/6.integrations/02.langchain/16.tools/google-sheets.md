@@ -1,72 +1,71 @@
 # Google Sheets
 
-## Create credential in Flowise
+## Создание учетных данных в OSMI для Google Sheets
 
-1. Add a new Google Sheets OAuth2 credential
-2. Enter a name for the credential.
-3. Copy the OAuth Redirect URL.
-4. Note that the following fields need to be filled in:
-   * Client ID
-   * Client Secret
+1. Добавить новые OAuth2-учетные данные для Google Sheets
+2. Введите название для учетных данных..
+3. Скопируйте OAuth Redirect URL.
+4. Обратите внимание, что необходимо заполнить следующие поля:
+   - Client ID
+   - Client Secret
 
-<figure><img src="/assets/image (271).png" alt="" width="429"><figcaption></figcaption></figure>
+![](/assets/image%20\(271\).png){width="429"}
 
-## Create/Use Google Project
+## Создание или использование проекта в Google
 
-1. Log in to your [**Google Cloud**](https://console.cloud.google.com/) account.
-2. Navigate to [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials), and select the project you want to use from the dropdown at the top left (or create a new project and select it).
-3. Set up the **OAuth consent screen** if you haven't configured one before.
+1. Войдите в аккаунт [**Google Cloud**](https://console.cloud.google.com/).
+2. Перейдите в [**Google Cloud Console > APIs & Services**](https://console.cloud.google.com/apis/credentials), выберите проект из выпадающего меню в левом верхнем углу (или создайте новый и выберите его).
+3. Настройте экран согласия **OAuth consent screen**, если он еще не настроен.
+   ![](/assets/image%20\(256\).png){width="563"}
+4. Перейдите в раздел **Credentials**, и нажмите **+ CREATE CREDENTIALS > OAuth client ID**.
 
-<figure><img src="/assets/image (256).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(257\).png){width="563"}
 
-4. Go to **Credentials**, then click **+ CREATE CREDENTIALS > OAuth client ID**.
+5. В списке **Application type** выберите **Web application**.
+6. В разделе **Authorized redirect URIs** нажмите **+ ADD URI** и вставьте ранее скопированный OAuth Redirect URL.
+7. Нажмите **Create**.
 
-<figure><img src="/assets/image (257).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(258\).png){width="407"}
 
-5. In the **Application type** dropdown, select **Web application**.
-6. Under **Authorized redirect URIs**, click **+ ADD URI** and paste the OAuth redirect URL copied earlier.
-7. Click **Create**.
+8. Скопируйте Client ID и Client Secret:
 
-<figure><img src="/assets/image (258).png" alt="" width="407"><figcaption></figcaption></figure>
+![](/assets/image%20\(259\).png){width="489"}
 
-8. Copy the Client ID and Client Secret:
+9. Перейдите в раздел **Enabled APIs & Services**, нажмите **+ ENABLE APIS AND SERVICES**.
+10. Введите в поиск и включите **Google Sheets API**.
 
-<figure><img src="/assets/image (259).png" alt="" width="489"><figcaption></figcaption></figure>
+![](/assets/image%20\(272\).png){width="560"}
 
-9. In **Enabled APIs & Services**, click **+ ENABLE APIS AND SERVICES**.
-10. Search for and enable the **Google Sheets API**.
+11. Вернитесь к разделу **Credentials** и выберите созданный **OAuth 2.0 Client IDs**. На странице данных найдите **Client ID** и **Client Secret**.
 
-<figure><img src="/assets/image (272).png" alt="" width="560"><figcaption></figcaption></figure>
+## Завершение настройки в OSMI
 
-11. Return to **Credentials**, click the newly created credential under **OAuth 2.0 Client IDs**, and on the detail page, you’ll find the **Client ID** and **Client Secret**.
+1. Заполните все ранее скопированные значения в соответствующих полях. Нажмите кнопку "**Authenticate**":
 
-## Finish setup in Flowise
+![](/assets/image%20\(273\).png){width="431"}
 
-1. Fill in all the values copied earlier. Then click "**Authenticate**":
+2. Откроется окно входа в Google:
 
-<figure><img src="/assets/image (273).png" alt="" width="431"><figcaption></figcaption></figure>
+![](/assets/image%20\(261\).png){width="448"}
 
-2. A Google login window will pop up:
+3. Войдите в учетную запись Google и предоставьте разрешения.
 
-<figure><img src="/assets/image (261).png" alt="" width="448"><figcaption></figcaption></figure>
+![](/assets/image%20\(263\).png){width="373"}
 
-3. Grant the permissions:
+4. После этого окно автоматически закроется, и учетные данные будут сохранены и готовы к использованию.
 
-<figure><img src="/assets/image (263).png" alt="" width="373"><figcaption></figcaption></figure>
+## Использование как инструмент агента (Agent Tool)
 
-4. Pop up window will be closed automatically and credential will be saved and ready to be used.
+- Можно выбрать несколько действий, чтобы агент сам определил, какое из них наиболее подходящее.
+- Параметры можно оставить пустыми, чтобы агент сам их определил.
+- Если пользователь введет параметры, они заменят автоматический выбор агента.
 
-## Use as Agent Tool
+![](/assets/image%20\(274\).png)
 
-Multiple actions can be selected to let the Agent intelligently choose the appropriate one.\
-Parameters can be left empty to allow the Agent to determine the values on its own. However, if the user provides values, those will override the Agent's choices.
+## Использование как узла инструмента (Tool Node)
 
-<figure><img src="/assets/image (274).png" alt=""><figcaption></figcaption></figure>
+- Также можно использовать как компонент в конкретном сценарии, например, для получения определенной таблицы или файла перед следующими шагами.
+- В этом режиме входные аргументы должны быть явно определены и заполнены.
+- В отличие от варианта для агента [агента](google-sheets#use-as-agent-tool) , в этом случае пользователь вручную заполняет поля, вводя фиксированные значения или переменные, окруженные двойными фигурными скобками `{{ }}`.
 
-## Use as Tool Node
-
-It can also be used as a Tool Node in a determined workflow scenario. For example, get a specific spreadsheet before proceeding to the next step.\
-In this mode, **Tool Input Arguments must be explicitly defined and filled with values**.\
-Unlike the [**Use as Agent Tool**](google-sheets.md#use-as-agent-tool) option, there is no Agent to automatically determine the inputs. The user must manually populate the fields, either by entering fixed values or using variables enclosed in double curly brackets `{{ }}`.
-
-<figure><img src="/assets/image (275).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(275\).png)

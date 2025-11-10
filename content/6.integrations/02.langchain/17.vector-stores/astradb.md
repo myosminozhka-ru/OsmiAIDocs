@@ -1,40 +1,40 @@
 # AstraDB
 
-## Setup
+## Настройка
 
-1. Register an account on [AstraDB](https://astra.datastax.com/)
-2. Login to portal. Create a Database
+1. Зарегистрируйте аккаунт на [AstraDB](https://astra.datastax.com/)
+2. Войдите в портал. Создайте базу данных.
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (2) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png)
 
-3. Choose Serverless (Vector), fill in the Database name, Provider, and Region
+3. Выберите опцию Serverless (Vector), укажите название базы данных, провайдера и регион.
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (2) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png){width="563"}
 
-4. After database has been setup, grab the API Endpoint, and generate Application Token
+4. После настройки базы данных скопируйте API Endpoint и сгенерируйте Application Token.
 
-<figure><img src="/assets/Picture7.png" alt=""><figcaption></figcaption></figure>
+![](/assets/Picture7.png)
 
-5. Create a new collection, select the desired dimenstion and similarity metric:
+5. Создайте новую коллекцию, выберите нужное измерение (dimension) и метрику сходства (similarity metric).
 
-<figure><img src="/assets/image (2) (1) (1) (1) (1) (2) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png)
 
-6. Back to Flowise canvas, drag and drop Astra node. Click **Create New** from the Credentials dropdown:
+6. В OSMI. Перетащите узел Astra на холст. Нажмите **Create New** в выпадающем списке Credentials (учётных данных).
 
-<figure><img src="/assets/image (4) (1) (1) (1) (1) (2).png" alt="" width="235"><figcaption></figcaption></figure>
+![](/assets/image%20\(4\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\).png){width="235"}
 
-7. Specify the API Endpoint and Application Token:
+7. Укажите API Endpoint и Application Token.
 
-<figure><img src="/assets/image (5) (1) (1) (1) (1) (2).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\).png){width="563"}
 
-8. You can now upsert data to AstraDB
+8. Теперь вы можете делать операции вставки и обновления данных (upsert) в AstraDB.
 
-<figure><img src="/assets/image (6) (1) (1) (1) (1) (1) (1) (2) (2).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(2\).png)
 
-9. Navigate back to Astra portal, and to your collection, you will be able to see all the data that has been upserted:
+9. Вернитесь в портал Astra и откройте вашу коллекцию — там вы увидите все данные, которые были upsert-ены.
 
-<figure><img src="/assets/image (7) (1) (1) (1) (1) (1) (2).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(7\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\).png)
 
-10. Start querying!
+10. Можно приступать к выполнению запросов!
 
-<figure><img src="/assets/image (8) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)

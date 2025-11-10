@@ -1,40 +1,40 @@
 # Chroma
 
-## Prerequisite
+## PrereqПредварительные условияuisite
 
-You need a Chroma server. You can:
+Вам потребуется сервер Chroma. Вы можете:
 
-1. Install Chroma CLI and run the server using `chroma run`
-2. Sign up for [Chroma Cloud](https://trychroma.com/home).
-3. Deploy your own Chroma instance in [Docker](https://docs.trychroma.com/guides/deploy/docker).
+1. Установить CLI Chroma и запустить сервер командой `chroma run`
+2. Зарегистрироваться в [Chroma Cloud](https://trychroma.com/home).
+3. Развернуть собственный экземпляр Chroma в [Docker](https://docs.trychroma.com/guides/deploy/docker).
 
-## Setup
+## Настройка
 
-| Input           | Description                                                                                                                                        | Default               | Cloud |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----- |
-| Document        | Can be connected with nodes from [Document Loader](../document-loaders/)                                                                           |                       |       |
-| Embeddings      | Can be connected with nodes from [Embeddings](../embeddings/)                                                                                      |                       |       |
-| Collection Name | Chroma collection name. Refer to [here](https://docs.trychroma.com/usage-guide#creating-inspecting-and-deleting-collections) for naming convention |                       |       |
-| Chroma URL      | Specify the URL of your chroma instance                                                                                                            | http://localhost:8000 | https://api.trychroma.com:8000 |
+| Входные данные  | Описание                                                                                                                                                | Значение по умолчанию   | Облако                           |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------- |
+| Document        | Можно подключать к узлам и [Document Loader](../document-loaders/)                                                                                      |                         |                                  |
+| Embeddings      | Можно подключать к узлам из [Embeddings](../embeddings/)                                                                                                |                         |                                  |
+| Collection Name | Название коллекции Chroma. Обратитесь [сюда](https://docs.trychroma.com/usage-guide#creating-inspecting-and-deleting-collections) для правил именования |                         |                                  |
+| Chroma URL      | Укажите URL вашего экземпляра Chroma                                                                                                                    | <http://localhost:8000> | <https://api.trychroma.com:8000> |
 
-For Chroma Cloud, you will need to get your tenant ID, and create your database and API key.
+Для Chroma Cloud нужно получить ID арендатора, создать базу данных и API ключ
 
-<figure><img src="/assets/image (6) (1) (1) (1) (1) (2) (1).png" alt="" width="238"><figcaption></figcaption></figure>
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png){width="238"}
 
-### Additional
+### Дополнительные шаги
 
-If you are running both Flowise and Chroma on Docker, there are additional steps involved.
+Если вы запускаете OSMI и Chroma на Docker, необходимо выполнить дополнительные шаги.
 
-1. Spin up Chroma docker first
+1. Запустите Docker контейнер Chroma
 
 ```bash
 docker compose up -d --build
 ```
 
-2. Open `docker-compose.yml` in Flowise
+2. Откройте файл `docker-compose.yml` в папке OSMI
 
 ```bash
-cd Flowise && cd docker
+cd OSMI && cd docker
 ```
 
 3. Modify the file to:
@@ -43,42 +43,46 @@ cd Flowise && cd docker
 version: '3.1'
 
 services:
-    flowise:
-        image: flowiseai/flowise
+    osmi:
+        image: osmi/osmi
         restart: always
         environment:
             - PORT=${PORT}
             - DEBUG=${DEBUG}
             - DATABASE_PATH=${DATABASE_PATH}
             - SECRETKEY_PATH=${SECRETKEY_PATH}
-            - FLOWISE_SECRETKEY_OVERWRITE=${FLOWISE_SECRETKEY_OVERWRITE}
+            - FLOWISE_SECRETKEY_OVERWRITE=${OSMI_SECRETKEY_OVERWRITE}
             - LOG_PATH=${LOG_PATH}
             - LOG_LEVEL=${LOG_LEVEL}
             - EXECUTION_MODE=${EXECUTION_MODE}
         ports:
             - '${PORT}:${PORT}'
         volumes:
-            - ~/.flowise:/root/.flowise
+            - ~/.osmi:/root/.osmi
         networks:
-            - flowise_net
-        command: /bin/sh -c "sleep 3; flowise start"
+            - osmi_net
+        command: /bin/sh -c "sleep 3; osmi start"
 networks:
-    flowise_net:
+    osmi_net:
         name: chroma_net
         external: true
 ```
 
-4. Spin up Flowise docker image
+4. Запустите контейнер osmi
 
 ```bash
 docker compose up -d
 ```
 
-5. On the Chroma URL, for Windows and MacOS Operating Systems specify [http://host.docker.internal:8000](http://host.docker.internal:8000/). For Linux based systems the default docker gateway should be used since host.docker.internal is not available: [http://172.17.0.1:8000](http://172.17.0.1:8000/)
+5. Настройка URL Chroma:
+   Для Windows и MacOS используйте:
+   <http://host.docker.internal:8000>
+   Для Linux-систем, где host.docker.internal недоступен, используйте адрес Docker-шлюза, например:
+   <http://172.17.0.1:8000>
 
-<figure><img src="/assets/image (5) (5).png" alt="" width="256"><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(5\).png){width="256"}
 
-## Resources
+## Ресурсы
 
-* [LangChain JS Chroma](https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/chroma)
-* [Chroma Getting Started](https://docs.trychroma.com/getting-started)
+- [LangChain JS Chroma](https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/chroma)
+- [Chroma Getting Started](https://docs.trychroma.com/getting-started)

@@ -1,27 +1,25 @@
 ---
-description: >-
-  Upsert embedded data and perform similarity or mmr search upon query using
-  MongoDB Atlas, a managed cloud mongodb database.
+description: Обновление встроенных данных и выполнение поиска по сходству или
+  MMR-запроса с использованием MongoDB Atlas — управляемой облачной базы данных
+  MongoDB.
 ---
 
 # MongoDB Atlas
 
-<figure><img src="/assets/image (161).png" alt="" width="308"><figcaption><p>MongoDB Atlas Node</p></figcaption></figure>
+![](/assets/image%20\(161\).png){width="308"}
 
-### Cluster Configuration[​](https://js.langchain.com/docs/integrations/vectorstores/mongodb_atlas/#initial-cluster-configuration) <a href="#initial-cluster-configuration" id="initial-cluster-configuration"></a>
+### Конфигурация кластера[​](https://js.langchain.com/docs/integrations/vectorstores/mongodb_atlas/#initial-cluster-configuration)[](#initial-cluster-configuration){#initial-cluster-configuration}
 
-To set up a MongoDB Atlas cluster, go to the [MongoDB Atlas ](https://www.mongodb.com/)website and sign up if you don’t have an account. When prompted, create and name your cluster, which will appear under the Database section. Then, select "**Browse Collections**" to either create a new collection or use one from the sample data provided.
+Чтобы настроить кластер MongoDB Atlas, перейдите на сайт [MongoDB Atlas ](https://www.mongodb.com/)и зарегистрируйтесь, если у вас ещё нет аккаунта. При необходимости создайте новый кластер и укажите его название — он появится в разделе База данных (Database). Затем нажмите Browse Collections (Обзор коллекций), чтобы создать новую коллекцию или выбрать одну из предоставленных образцов данных.
 
-{% hint style="warning" %}
-Ensure the cluster you create is version 7.0 or higher.
-{% endhint %}
+> Убедитесь, что версия вашего кластера — 7.0 или выше.
 
-### Creating Index
+### Создание индекса
 
-After setting up your cluster, the next step is to create an index for the collection field you intend to search.
+После настройки кластера следующий шаг — создание индекса для поля коллекции, по которому вы планируете искать.
 
-1. Go to the **Atlas Search** tab and click on **Create Search Index**.
-2. Select **Atlas Vector Search - JSON Editor**, choose the appropriate database and collection, and then paste the following into the text box:
+1. Перейдите на вкладку Atlas Search и нажмите Create Search Index (Создать индекс поиска).
+2. Выберите Atlas Vector Search - JSON Editor, укажите нужную базу данных и коллекцию, а затем вставьте следующий код в текстовое поле:
 
 ```json
 {
@@ -36,32 +34,30 @@ After setting up your cluster, the next step is to create an index for the colle
 }
 ```
 
-Make sure the `numDimensions` property corresponds to the dimensionality of the embeddings you're using. For instance, Cohere embeddings typically have 1024 dimensions, while OpenAI embeddings have 1536 by default.
+Убедитесь, что свойство `numDimensions` соответствует размерности ваших встраиваний. Например, у эмбеддингов Cohere обычно 1024 измерения, а у OpenAI — по умолчанию 1536.
 
-**Note:** The vector store expects certain default values, such as:
+Примечание: Векторное хранилище ожидает определённые значения по умолчанию, такие как:
 
-* An index name of `default`
-* A collection field name of `embedding`
-* A raw text field name of `text`
+- Имя индекса — `default`
+- Имя поля для встраиваний — `embedding`
+- Имя поля для сырого текста — `text`
 
-Ensure you initialize the vector store with field names that match your index and collection schema, as shown in the example above.
+Убедитесь, что вы инициализируете векторное хранилище с полями, соответствующими вашей схеме индекса и коллекции (как в примере выше).
 
-Once this is done, proceed to build the index.
+После этого нажмите Build Index (Создать индекс).
 
-{% hint style="info" %}
-This section is a work in progress. We appreciate any help you can provide in completing this section. Please check our [Contribution Guide](broken-reference) to get started.
-{% endhint %}
+Этот раздел находится в разработке. Мы будем благодарны за любую помощь по его завершению. Подробнее можно ознакомиться в [Our Contribution Guide](broken-reference).
 
-### Flowise Configuration
+### Конфигурация osmi
 
-Drag and drop the MongoDB Atlas Vector Store, and add a new credential. Use the connection string provided from the MongoDB Atlas dashboard:
+Перетащите на холст компонент MongoDB Atlas Vector Store. Добавьте новую учётную запись (credential). Используйте строку соединения (connection string), полученную из панели управления MongoDB Atlas.
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (2).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\).png)
 
-Fill in the rest of the fields:
+Заполните остальные поля
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (2) (1).png" alt="" width="252"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png){width="252"}
 
-You may also configure more details from Additional Parameters:
+По желанию можете настроить дополнительные параметры в разделе Additional Parameters.
 
-<figure><img src="/assets/image (164).png" alt="" width="518"><figcaption></figcaption></figure>
+![](/assets/image%20\(164\).png){width="518"}

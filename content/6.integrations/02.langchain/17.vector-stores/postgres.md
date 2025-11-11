@@ -1,16 +1,15 @@
 ---
-description: >-
-  Upsert embedded data and perform similarity search upon query using pgvector
-  on Postgres.
+description: Обновление встроенных данных и выполнение поиска по сходству с
+  использованием pgvector на Postgres.
 ---
 
 # Postgres
 
-<figure><img src="/assets/image (163).png" alt="" width="292"><figcaption><p>Postgres Node</p></figcaption></figure>
+![](/assets/image%20\(163\).png){width="292"}
 
-There are multiple methods to connect to Postgres based on how your instance is set up. Below is an example of a local configuration using a prebuilt Docker image provided by the pgvector team.
+Есть несколько способов подключиться к Postgres в зависимости от вашей настройки. Ниже представлен пример локальной конфигурации с использованием преднастроенного Docker-образа, предоставленного командой pgvector.
 
-Create a file named `docker-compose.yml` with the content below:
+Создайте файл с именем `docker-compose.yml` со следующим содержимым:
 
 ```yaml
 # Run this command to start the database:
@@ -31,16 +30,16 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 ```
 
-`docker compose up` to start the Postgres container.
+Запустите контейнер Postgres командой: `docker compose up`
 
-Create new credential with the configured user and password:
+Создайте новые учетные данные с использованием указанных настроек пользователя и пароля из файла `docker-compose.yml`.
 
-<figure><img src="/assets/image (50).png" alt="" width="526"><figcaption></figcaption></figure>
+![](/assets/image%20\(50\).png){width="526"}
 
-Fill in the node's field with values configured in `docker-compose.yml`. For example:
+Заполните поля узла (node) следующими значениями, соответствующими конфигурации из файла `docker-compose.yml`:
 
-* Host: **localhost**
-* Database: **api**
-* Port: **5432**
+- Host: **localhost**
+- Database: **api**
+- Port: **5432**
 
-Voila! You have now successfully setup Postgres Vector ready to be used.
+Теперь у вас настроена база данных Postgres с поддержкой pgvector, готовая к использованию для вставки векторов и выполнения поиска по сходству.

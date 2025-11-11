@@ -1,61 +1,57 @@
 ---
-description: >-
-  Upsert embedded data and perform similarity search upon query using Pinecone,
-  a leading fully managed hosted vector database.
+description: Обновление встроенных данных и выполнение поиска по сходству с
+  использованием Pinecone — ведущей полностью управляемой облачной векторной
+  базы данных.
 ---
 
 # Pinecone
 
-## Prerequisite
+## Предварительные условия
 
-1. Register an account for [Pinecone](https://app.pinecone.io/)
-2. Click **Create index**
+1. Зарегистрируйтесь на [Pinecone](https://app.pinecone.io/)
+2. Нажмите **Create index**
 
-<figure><img src="/assets/pinecone_1.png" alt=""><figcaption></figcaption></figure>
+![](/assets/pinecone_1.png)
 
-3. Fill in required fields:
-   - **Index Name**, name of the index to be created. (e.g. "flowise-test")
-   - **Dimensions**, size of the vectors to be inserted in the index. (e.g. 1536)
+3. Заполните необходимые поля:
+   - **Index Name**, название создаваемого индекса (например, "flowise-test").
+   - **Dimensions**, размер векторов, которые будут вставлены в индекс (например, 1536).
 
-<figure><img src="/assets/pinecone_2.png" alt="" width="527"><figcaption></figcaption></figure>
+![](/assets/pinecone_2.png){width="527"}
 
-4. Click **Create Index**
+4. Нажмите **Create Index**
 
-## Setup
+## Настройка
 
-1.  Get/Create your **API Key**
+1. Получите или создайте ваш **API Key**
 
-<figure><img src="/assets/pinecone_3.png" alt=""><figcaption></figcaption></figure>
+![](/assets/pinecone_3.png)
 
-2.  Add a new **Pinecone** node to canvas and fill in the parameters:
-    - Pinecone Index
-    - Pinecone namespace (optional)
+2. Добавьте новый узел **Pinecone** на холст и заполните параметры:
+   - Pinecone Index - название индекса
+   - Pinecone namespace (необязательно)
 
-<figure><img src="/assets/pinecone_4.png" alt="" width="279"><figcaption></figcaption></figure>
+![](/assets/pinecone_4.png){width="279"}
 
-3. Create new Pinecone credential -> Fill in **API Key**
+3. Создайте новые учетные данные Pinecone → Введите **API Key**.
 
-<figure><img src="/assets/pinecone_5.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/pinecone_5.png){width="563"}
 
-4. Add additional nodes to canvas and start the upsert process
-   - **Document** can be connected with any node under [**Document Loader**](../document-loaders/) category
-   - **Embeddings** can be connected with any node under [**Embeddings** ](../embeddings/)category
+4. Добавьте дополнительные узлы на холст и начните процесс обновления данных (upsert).
+   - Документы можно подключить к любому узлу категории [**Document Loader**](../document-loaders/).
+   - Векторные представления (Embeddings) можно подключить к любому узлу категории [**Embeddings** ](../embeddings/).
 
-<figure><img src="/assets/pinecone_6.png" alt=""><figcaption></figcaption></figure>
+![](/assets/pinecone_6.png)![](/assets/pinecone_7.png)
 
-<figure><img src="/assets/pinecone_7.png" alt=""><figcaption></figcaption></figure>
+5. Проверьте через [дашборд Pinecone](https://app.pinecone.io), чтобы убедиться, что данные успешно обновлены (upserted).
 
-5. Verify from [Pinecone dashboard](https://app.pinecone.io) to see if data has been successfully upserted:
+![](/assets/pinecone_8.png)
 
-<figure><img src="/assets/pinecone_8.png" alt=""><figcaption></figcaption></figure>
+6. Ресурсы
 
-6.
-
-## Resources
-
-- LangChain Pinecone vectorstore integrations
-  - [Python](https://python.langchain.com/v0.2/docs/integrations/providers/pinecone/)
-  - [NodeJS](https://js.langchain.com/v0.2/docs/integrations/vectorstores/pinecone)
-- [Pinecone LangChain integration](https://docs.pinecone.io/integrations/langchain)
-- [Pinecone Flowise integration](https://docs.pinecone.io/integrations/flowise)
-- [Pinecone official clients](https://docs.pinecone.io/reference/pinecone-clients)
+- Интеграция Pinecone с LangChain
+  - [Python](https://docs.langchain.com/oss/python/langchain/overview)
+  - [NodeJS](https://docs.langchain.com/oss/javascript/langchain/retrieval)
+- Интеграция [Pinecone с LangChain](https://docs.pinecone.io/integrations/langchain)
+- Интеграция [Pinecone с OSMI](https://docs.pinecone.io/integrations/flowise)
+- Официальные [клиенты Pinecone](https://docs.pinecone.io/reference/pinecone-clients)

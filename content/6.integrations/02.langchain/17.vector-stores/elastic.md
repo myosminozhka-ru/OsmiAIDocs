@@ -1,69 +1,67 @@
 # Elastic
 
-## Prerequisite
+## Предварительные условия
 
-1. You can use the [official Docker image](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html) to get started, or you can use [Elastic Cloud](https://www.elastic.co/cloud/), Elastic's official cloud service. In this guide, we will be using cloud version.
-2. [Register](https://cloud.elastic.co/registration) an account or [login](https://cloud.elastic.co/login) with existing account on Elastic cloud.
+1. Вы можете начать с использования официального [Docker image](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html) или воспользоваться облачным сервисом [Elastic Cloud](https://www.elastic.co/cloud/), официальной облачной платформой Elastic. В этой инструкции мы будем использовать облачную версию.
+2. [Зарегистрируйтесь](https://cloud.elastic.co/registration) на Elastic Cloud или [войдите](https://cloud.elastic.co/login) в существующий аккаунт.
 
-<figure><img src="/assets/elastic1.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic1.png)
 
-3. Click **Create deployment**. Then, name your deployment, and choose the provider.
+3. Нажмите **Create deployment**. Затем укажите название развертывания и выберите провайдера.
 
-<figure><img src="/assets/elastic2.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/elastic2.png){width="563"}
 
-4. After deployment is finished, you should be able to see the setup guides as shown below. Click the **Set up vector search** option.
+4. После завершения развертывания вы увидите руководства по настройке, как показано ниже. Нажмите **Set up vector search** (Настроить векторный поиск).
 
-<figure><img src="/assets/elastic4.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic4.png)
 
-5. You should now see the **Getting started** page for **Vector Search**.
+5. Теперь откроется страница Getting started for Vector Search (Начало работы по векторному поиску).
 
-<figure><img src="/assets/elastic5.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic5.png)
 
-6. On the left hand side bar, click **Indices**. Then, **Create a new index**.
+6. В боковой панели слева нажмите **Indices** (Индексы). Затем — **Create a new index** (Создать новый индекс).
 
-<figure><img src="/assets/elastic6.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic6.png)
 
-7. Select **API** ingestion method
+7. Выберите метод загрузки данных — API ingestion method.
 
-<figure><img src="/assets/elastic7.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic7.png)
 
-8. Name your search index name, then **Create Index**
+8. Укажите название вашего поискового индекса и нажмите **Create Index** (Создать индекс).
 
-<figure><img src="/assets/elastic8.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic8.png)
 
-9. After the index has been created, generate a new API key, take note of both generated API key and the URL
+9. После создания индекса сгенерируйте новый API-ключ, запомните оба: и API-ключ, и URL.
 
-<figure><img src="/assets/elastic9.png" alt=""><figcaption></figcaption></figure>
+![](/assets/elastic9.png)
 
-## Flowise Setup
+## Настройка OSMI
 
-1. Add a new **Elasticsearch** node on canvas and fill in the **Index Name**
+1. Добавьте новый узел **Elasticsearch** на холст и укажите имя индекса.
 
-<figure><img src="/assets/elastic10.png" alt="" width="275"><figcaption></figcaption></figure>
+![](/assets/elastic10.png){width="275"}
 
-2. Add new credential via **Elasticsearch API**
+2. Добавьте новые учетные данные через **Elasticsearch API**.
 
-<figure><img src="/assets/elastic11.png" alt="" width="429"><figcaption></figcaption></figure>
+![](/assets/elastic11.png){width="429"}
 
-3. Take the URL and API Key from Elasticsearch, fill in the fields
+3. Возьмите URL и API-ключ из ElasticSearch и заполните соответствующие поля.
 
-<figure><img src="/assets/elastic12.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/elastic12.png){width="563"}
 
-4. After credential has been created successfully, you can start upserting the data
+4. После успешного создания учетных данных можно начинать загрузку (upsert) данных.
 
-<figure><img src="/assets/Untitled (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/Untitled%20\(1\)%20\(1\)%20\(1\).png)![](/assets/elastic13.png)
 
-<figure><img src="/assets/elastic13.png" alt=""><figcaption></figcaption></figure>
+5. После успешной загрузки данных вы можете проверить их через панель управления Elastic.
 
-5. After data has been upserted successfully, you can verify it from Elastic dashboard:
+![](/assets/image%20\(7\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png)
 
-<figure><img src="/assets/image (7) (1) (1) (1) (1) (1) (2) (1).png" alt=""><figcaption></figcaption></figure>
+6. Теперь вы можете задавать вопросы в чате.
 
-6. Voila! You can now start asking question in the chat
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png)
 
-<figure><img src="/assets/image (6) (1) (1) (1) (1) (1) (1) (2) (1).png" alt=""><figcaption></figcaption></figure>
+## Ресурсы
 
-## Resources
-
-* [LangChain JS Elastic](https://js.langchain.com/docs/integrations/vectorstores/elasticsearch)
-* [Vector Search (kNN) Implementation Guide - API Edition](https://www.elastic.co/search-labs/blog/articles/vector-search-implementation-guide-api-edition)
+- [LangChain JS Elastic](https://js.langchain.com/docs/integrations/vectorstores/elasticsearch)
+- [Vector Search (kNN) Implementation Guide - API Edition](https://www.elastic.co/search-labs/blog/articles/vector-search-implementation-guide-api-edition)

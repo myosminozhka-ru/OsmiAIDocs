@@ -1,57 +1,51 @@
 # Qdrant
 
-## Prerequisites
+## Предварительные условия
 
-A [locally running instance of Qdrant](https://qdrant.tech/documentation/quick-start/) or a Qdrant cloud instance.
+[Локально запущенная инстанция Qdrant](https://qdrant.tech/documentation/quick-start/) или инстанция Qdrant в облаке.
 
-To get a Qdrant cloud instance:
+Получение инстанции Qdrant в облаке:
 
-1. Head to the Clusters section of the [Cloud Dashboard](https://cloud.qdrant.io/overview).
-2. Select **Clusters** and then click **+ Create**.
+1. Перейдите в раздел Clusters (Кластеров) на панели управления [Cloud Dashboard](https://cloud.qdrant.io/overview).
+2. Выберите **Clusters** и нажмите **+ Create** (Создать).
 
-<figure><img src="/assets/qdrant/2.png" alt=""><figcaption></figcaption></figure>
+![](/assets/qdrant/2.png)
 
-3. Choose your cluster configurations and region.
-4. Hit **Create** to provision your cluster.
+3. Выберите конфигурации кластера и регион.
+4. Нажмите **Create** (Создать), чтобы запустить кластер.
 
-## Setup
+## Настройка
 
-1. Get/Create your **API Key** from the **Data Access Control** section of the [Cloud Dashboard](https://cloud.qdrant.io/overview).
-2. Add a new **Qdrant** node on canvas.
-3. Create new Qdrant credential using the API Key
+1. Получите или создайте API-ключ в разделе Data Access Control (Контроль доступа к данным) на панели [Cloud Dashboard](https://cloud.qdrant.io/overview).
+2. Добавьте новый узел Qdrant на холст.
+3. Создайте новые учетные данные для Qdrant, используя API-ключ.
 
-<figure><img src="/assets/qdrant/1.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/qdrant/1.png){width="563"}
 
-4. Enter the required info into the **Qdrant** node:
-   * Qdrant server URL
-   * Collection name
+4. Заполните необходимые поля в узле **Qdrant**:
+   - Qdrant server URL — URL сервера Qdrant.
+   - Collection name — название коллекции.
 
-<figure><img src="/assets/qdrant/3.png" alt="" width="239"><figcaption></figcaption></figure>
+![](/assets/qdrant/3.png){width="239"}
 
-5. **Document** input can be connected with any node under [**Document Loader**](../document-loaders/) category.
-6. **Embeddings** input can be connected with any node under [**Embeddings**](../embeddings/) category.
+5. Документы можно подключить к любому узлу категории [**Document Loader**](../document-loaders/).
+6. Векторные представления (Embeddings) можно подключить к любому узлу категории [**Embeddings**](../embeddings/).
 
-## Filtering
+## Фильтрация
 
-Let's say you have different documents upserted, each specified with a unique value under the metadata key `{source}`
+Допустим, у вас есть несколько документов, добавленных (upserted), каждые с уникальным значением в метаданных по ключу `{source}`.
 
-<div align="left">
+::div{align="left"}
+![](/assets/Screenshot%202024-03-05%20141551.png){width="563"}![](/assets/Screenshot%202024-03-05%20141619.png){width="563"}
+::
 
-<figure><img src="/assets/Screenshot 2024-03-05 141551.png" alt="" width="563"><figcaption></figcaption></figure>
+Вы хотите фильтровать по этому ключу. Qdrant поддерживает следующий [синтаксис](https://qdrant.tech/documentation/concepts/filtering/#nested-key) для фильтрации:
 
- 
+**UI** — через интерфейс пользователя (в случае визуальных инструментов).
 
-<figure><img src="/assets/Screenshot 2024-03-05 141619.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\)%20\(1\).png){width="338"}
 
-</div>
-
-Then, you want to filter by it. Qdrant supports following [syntax](https://qdrant.tech/documentation/concepts/filtering/#nested-key) when it comes to filtering:
-
-**UI**
-
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (2) (1) (1) (1).png" alt="" width="338"><figcaption></figcaption></figure>
-
-**API**
+**API** — через API-запрос
 
 ```json
 "overrideConfig": {
@@ -68,8 +62,8 @@ Then, you want to filter by it. Qdrant supports following [syntax](https://qdran
 }
 ```
 
-## Resources
+## Ресурсы
 
-* [Qdrant documentation](https://qdrant.tech/documentation/)
-* [LangChain JS Qdrant](https://js.langchain.com/docs/integrations/vectorstores/qdrant)
-* [Qdrant Filter](https://qdrant.tech/documentation/concepts/filtering/#nested-key)
+- [Qdrant documentation](https://qdrant.tech/documentation/)
+- [LangChain JS Qdrant](https://js.langchain.com/docs/integrations/vectorstores/qdrant)
+- [Qdrant Filter](https://qdrant.tech/documentation/concepts/filtering/#nested-key)

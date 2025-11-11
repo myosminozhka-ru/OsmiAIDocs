@@ -1,34 +1,34 @@
 # Redis
 
-## Prerequisite
+## Предварительные условия
 
-1. Spin up a [Redis-Stack Server](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/) using Docker
+1. Запустите сервер [Redis-Stack](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/) с помощью Docker.
 
 ```bash
 docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
 ```
 
-## Setup
+## Настройка
 
-1. Add a new **Redis** node on canvas.
-2. Create new Redis credential.
+1. Добавьте новый узел **Redis** на холст.
+2. Создайте новые учетные данные для Redis.
 
-<figure><img src="/assets/image (1) (1) (3) (1) (1).png" alt="" width="257"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(3\)%20\(1\)%20\(1\).png){width="257"}
 
-3. Select type of Redis Credential. Choose Redis API if you have username and password, otherwise Redis URL:
+3. Выберите тип учетных данных Redis:
+   Redis API, если у вас есть имя пользователя и пароль.
+   Либо Redis URL, если у вас только URL-адрес.
 
-<figure><img src="/assets/image (2) (1) (1) (2).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(2\).png){width="563"}
 
-4. Fill in the url:
+4. Введите ваш Redis URL-адрес.
 
-<figure><img src="/assets/image (3) (1) (1) (1) (2) (1).png" alt="" width="542"><figcaption></figcaption></figure>
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png){width="542"}
 
-5. Now you can start upserting data with Redis:
+5. Теперь вы можете приступать к вставке данных (upsert) с использованием Redis.
 
-<figure><img src="/assets/image (8) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)![](/assets/image%20\(9\)%20\(2\)%20\(1\).png)
 
-<figure><img src="/assets/image (9) (2) (1).png" alt=""><figcaption></figcaption></figure>
+6. Перейдите на портал Redis Insight и выберите вашу базу данных. Вы увидите все добавленные (upserted) данные на панели, что подтверждает успешную настройку:
 
-6. Navigate to Redis Insight portal, and to your database, you will be able to see all the data that has been upserted:
-
-<figure><img src="/assets/image (138).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(138\).png)

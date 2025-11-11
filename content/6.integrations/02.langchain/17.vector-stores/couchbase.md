@@ -1,46 +1,47 @@
 ---
-description: Upsert embedded data and perform vector search upon query using
-  Couchbase, a NoSQL cloud developer data platform for critical, AI-powered
-  applications.
+description: Upsert встроенных данных и выполнение поиска по вектору с
+  использованием Couchbase — платформы облачных NoSQL для критически важных
+  приложений с искусственным интеллектом.
 ---
 
 # Couchbase
 
-## Prerequisite
+## Предварительные условия
 
-### Requirements
+### Требования
 
-1. Couchbase Cluster (Self Managed or Capella) version **7.6+** with [Search Service](https://docs.couchbase.com/server/current/search/search.html).
-2. Capella Setup: To know more about connecting to your Capella cluster, please follow the [instructions](https://docs.couchbase.com/cloud/get-started/connect.html?_gl=1*1yhpmel*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.). :br Specifically, you need to do the following:
-   - Create the [database credentials](https://docs.couchbase.com/cloud/clusters/manage-database-users.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) to access cluster.
-   - [Allow access](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) to the Cluster from the IP on which the application is running.
-   :brSelf Managed Setup:
-   - Follow [Couchbase Installation Options](https://developer.couchbase.com/tutorial-couchbase-installation-options) for installing the latest Couchbase Database Server Instance. Make sure to add the Search Service.
-3. Search Index Creation on the Full Text Service in Couchbase.
+1. Кластер Couchbase (Self Managed или Capella) версии 7.6+ с включенной [Search Service](https://docs.couchbase.com/server/current/search/search.html).
+2. Настройка Capella: Для подключения к кластеру Capella следуйте [инструкциям](https://docs.couchbase.com/cloud/get-started/connect.html?_gl=1*1yhpmel*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.).
+   - Создайте [учётные данные базы данных](https://docs.couchbase.com/cloud/clusters/manage-database-users.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) для доступа к кластеру..
+   - [Разрешите доступ](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) к кластеру с IP-адреса, с которого запускается приложение.
+     :br-self Самостоятельная настройка::
+   - Следуйте параметрам установки [Couchbase Installation Options](https://developer.couchbase.com/tutorial-couchbase-installation-options) для установки последней версии сервера базы данных Couchbase. Обязательно добавьте службу поиска.
+3. Создайте поисковый индекс в разделе Search
 
-### Importing Search Index
+### Импорт поискового индекса
 
-#### [Couchbase Capella](\(https:/docs.couchbase.com/cloud/search/import-search-index.html)
+#### В [Couchbase Capella](\(https:/docs.couchbase.com/cloud/search/import-search-index.html)
 
-Follow these steps to import a Search Index in Capella:
+- Скопируйте определение индекса в новый файл `index.json`.
+- Импортируйте файл согласно документации.
+- Нажмите Create Index для завершения.
 
-- Copy the index definition to a new file named `index.json`.
-- Import the file in Capella following the instructions in the documentation.
-- Click Create Index to finalize the index creation.
+#### В [Couchbase Server](\(https:/docs.couchbase.com/server/current/search/import-search-index.html)
 
-#### [Couchbase Server](\(https:/docs.couchbase.com/server/current/search/import-search-index.html)
+Перейдите в Search → Add Index → Import.
 
-Follow these steps for Couchbase Server:
-
-- Navigate to Search → Add Index → Import.
-- Copy the provided Index definition into the Import screen.
-- Click Create Index to finalize the index creation.
+- Вставьте определение индекса.
+- Нажмите Create Index.
+- Вы также можете создать векторный индекс через UI поиска на обоих платформах.
 
 You may also create a vector index using Search UI on both [Couchbase Capella](https://docs.couchbase.com/cloud/vector-search/create-vector-search-index-ui.html?_gl=1*1rglcpj*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) and [Couchbase Self Managed Server](https://docs.couchbase.com/server/current/vector-search/create-vector-search-index-ui.html?_gl=1*t7aeet*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.).
 
-### Index Definition
+### Определение индекса
 
-Here, we are creating the index `vector-index` on the documents. The Vector field is set to `embedding` with 1536 dimensions and the text field set to `text`. We are also indexing and storing all the fields under `metadata` in the document as a dynamic mapping to account for varying document structures. The similarity metric is set to `dot_product`. If there is a change in these parameters, please adapt the index accordingly.
+Вы создаёте индекс `vector-index` на документах, где:
+Поле `embedding` — вектор с 1536 измерениями, с метрикой сходства `dot_product`.
+Включается индексирование и хранение всех полей внутри `metadata` в динамическом режиме.
+В документах будет индексироваться и храниться поле `text`.
 
 ```json
 {
@@ -122,32 +123,37 @@ Here, we are creating the index `vector-index` on the documents. The Vector fiel
 
 ```
 
-## Setup
+## Настройка
 
-1. Add a new **Couchbase** node on canvas and fill in the Bucket Name, Scope Name, Collection Name and Index Name
+1. На холсте добавьте узел **Couchbase** и укажите:
+
+- имя bucket,
+- имя scope,
+- имя коллекции,
+- имя индекса.
 
 ![](/assets/couchbase_1.png)
 
-2. Add new credential and fill in the parameters:
-   - Couchbase Connection String
-   - Cluster Username
-   - Cluster Password
+2. Создайте новые учётные данные:
+
+- Couchbase Connection String
+- Cluster Username
+- Cluster Password
 
 ![](/assets/couchbase_2.png)
 
-3. Add additional nodes to canvas and start the upsert process
-   - **Document** can be connected with any node under [**Document Loader**](../document-loaders/) category
-   - **Embeddings** can be connected with any node under [**Embeddings** ](../embeddings/)category
+3. Добавьте новые узлы и запустите процесс upsert (обновление/вставка данных).
 
-![](/assets/couchbase_3.png)
+- Связать документ можно с любым узлом из категории [**Document Loader**](../document-loaders/).
+- Связать **Embeddings** — с узлом из [**Embeddings** ](../embeddings/).
 
-![](/assets/couchbase_4.png)
+![](/assets/couchbase_3.png)![](/assets/couchbase_4.png)
 
-5. Verify from the Couchbase UI to see if data has been successfully upserted!
+4. Перейдите в UI Couchbase и убедитесь, что данные успешно добавлены.
 
-## Resources
+## Ресурсы
 
-- LangChain Couchbase vectorstore integrations
+- Интеграции LangChain для Couchbase векторного хранилища
   - [Python](https://python.langchain.com/docs/integrations/vectorstores/couchbase/)
   - [NodeJS](https://js.langchain.com/docs/integrations/vectorstores/couchbase/)
-- Refer to the [Couchbase Documentation](https://docs.couchbase.com/home/index.html) to learn about Couchbase.
+- Обратитесь к документации [Couchbase Documentation](https://docs.couchbase.com/home/index.html), чтобы ознакомиться с информацией о Couchbase.

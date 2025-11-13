@@ -1,17 +1,18 @@
 # Set/Get Variable
 
-If you are running a Custom Function, or LLM Chain, you might want to reuse the result in other nodes without having to recompute/rerun the same thing again. You can save the output result as a variable, and reuse it for other nodes that is further down the flow path.
+Использование переменных для повторного использования результатов
+Если вы запускаете пользовательскую функцию (Custom Function) или цепочку LLM (LLM Chain), возможно, вам захочется использовать результат в других узлах без необходимости повторного выполнения или пересчёта. Для этого можно сохранить вывод как переменную и использовать её в других узлах, расположенных дальше по потоку.
 
-<figure><img src="..//assets/savereuse.png" alt=""><figcaption></figcaption></figure>
+![](..//assets/savereuse.png)
 
-### Set Variable
+### Установка переменной (Set Variable)
 
-Taking inputs from any node that outputs `string, number, boolean, json, array,` we can assign a variable name to it.
+Вы можете взять входные данные из любого узла, который выводит строку, число, булевое значение, JSON, массив и присвоить им имя переменной.
 
-<figure><img src="..//assets/image (11) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="270"><figcaption></figcaption></figure>
+![](..//assets/image%20\(11\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="270"}
 
-### Get Variable
+### Получение переменной (Get Variable)
 
-You can get the variable value from the variable name at a later stage:
+Позже, в другом узле, вы можете получить значение этой переменной по её имени.
 
-<figure><img src="..//assets/image (12) (1) (2).png" alt="" width="563"><figcaption></figcaption></figure>
+![](..//assets/image%20\(12\)%20\(1\)%20\(2\).png){width="563"}

@@ -1,42 +1,42 @@
 # SQL Agent
 
-This tutorial will guide you through building an intelligent SQL Agent that can interact with databases, generate SQL queries, validate them, execute them, and self-correct when errors occur.
+Этот учебник проведет вас по созданию интеллектуального SQL-агента, который умеет взаимодействовать с базой данных, генерировать SQL-запросы, проверять их, выполнять и самостоятельно исправлять ошибки при необходимости.
 
-## Overview
+## Обзор
 
-The SQL Agent flow implements a robust database interaction system that:
+Рабочий процесс SQL-агента реализует надежную систему взаимодействия с базой данных, которая:
 
-1. Retrieves database schema information
-2. Generates SQL queries based on user questions
-3. Validates generated queries for common mistakes
-4. Executes queries against the database
-5. Checks results for errors and self-corrects when needed
-6. Provides natural language responses based on query results
+1. Получает информацию о структуре базы данных
+2. Генерирует SQL-запросы на основе вопросов пользователя
+3. Проверяет сгенерированные запросы на наличие распространенных ошибок
+4. Выполняет запросы к базе данных
+5. Проверяет результаты на наличие ошибок и при необходимости самостягивает их
+6. Формирует ответы на естественном языке на основе результатов запроса
 
-<figure><img src="/assets/image (5) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)
 
-### Step 1: Setting Up the Start Node
+### Настройка стартового узла
 
-Begin by adding a **Start** node to your canvas. This serves as the entry point for your SQL agent.
+Начинайте с добавления узла "Старт" на вашу панель. Этот узел служит точкой входа для вашего SQL-агента.
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Input Type**: Select "Chat Input" to accept user questions
-* **Flow State**: Add a state variable with key "`sqlQuery`" and empty value
+- **Input Type**: Выберите "Chat Input" (чат-вход), чтобы принимать вопросы пользователя
+- **Flow State**: Добавьте переменную состояния с ключом `sqlQuery` и пустым значением
 
-The Start node initializes the flow state with an empty `sqlQuery` variable that will store the generated SQL query throughout the process.
+Этот узел инициализирует состояние потока — переменную `sqlQuery`, в которую будет записываться созданный SQL-запрос.
 
-### Step 2: Retrieving Database Schema
+### Шаг 2: Получение структуры базы данных
 
-Add a **Custom Function** node and connect it to the Start node.
+Добавьте узел "Функция" (**Custom Function**) и соедините его со стартовым узлом.
 
-<figure><img src="/assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Javascript Function**: This is an example function that connects to your database and retrieves the complete schema including table structures, column definitions, and sample data.
+- **Javascript Function**: Пример функции, которая подключается к вашей базе данных и извлекает информацию о всей структуре — таблицах, столбцах и примерных данных.
 
 ```javascript
 const { DataSource } = require('typeorm');
@@ -122,17 +122,18 @@ await getSQLPrompt();
 return sqlSchemaPrompt;
 ```
 
-### Step 3: Generating SQL Queries
+### Шаг 3: Генерация SQL-запросов
 
-Add an **LLM** node connected to the "Get DB Schema" node.
+Добавьте узел **LLM** (Large Language Model), соединённый с узлом "Получить схему базы данных".
 
-<figure><img src="/assets/image (4) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(4\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Messages**: Add a system message:
+- **Messages**: добавьте системное сообщение:
+  :
 
-```
+```text
 You are an agent designed to interact with a SQL database. Given an input question, create a syntactically correct sqlite query to run, then look at the results of the query and return the answer. Unless the user specifies a specific number of examples they wish to obtain, always limit your query to at most 5 results. You can order the results by a relevant column to return the most interesting examples in the database. Never query for all the columns from a specific table, only ask for the relevant columns given the question. DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
 
 Here is the relevant table info:
@@ -142,25 +143,26 @@ Note:
 - Only generate ONE SQL query
 ```
 
-* **JSON Structured Output**: Here we instruct the model only return structured output, to prevent LLM from including other text other than the SQL query.
-  * Key: "`sql_query`"
-  * Type: "string"
-  * Description: "SQL query"
-* **Update Flow State**: Set key "`sqlQuery`" with value `{{ output.sql_query }}`
+- \*\*JSON Здесь мы инструктируем модель возвращать только структурированный вывод, чтобы предотвратить включение моделью любого текста помимо SQL-запроса.
+  Ключ: "sql\_query".
+  - Ключ: "`sql_query`"
+  - Тип: "string"
+  - Описание: "SQL query"
+- Обновить состояние потока: Установить ключ`sqlQuery`" со значением `{{ output.sql_query }}`
 
-This node transforms the user's natural language question into a structured SQL query using the database schema information.
+Этот узел преобразует вопрос пользователя на естественном языке в структурированный SQL-запрос, используя информацию о схеме базы данных.
 
-### Step 4: Validating SQL Query Syntax
+### Шаг 4: Проверка синтаксиса
 
-Add a **Condition Agent** node connected to the "Generate SQL Query" LLM.
+SQL-запроса Добавьте условный узел **Condition Agent**, связанный с узлом генерации SQL-запроса.
 
-<figure><img src="/assets/image (5) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Instructions**:
+- **Инструкции**:
 
-```
+```text
 You are a SQL expert with a strong attention to detail. Double check the SQL query for common mistakes, including:
 - Using NOT IN with NULL values
 - Using UNION when UNION ALL should have been used
@@ -172,42 +174,42 @@ You are a SQL expert with a strong attention to detail. Double check the SQL que
 - Using the proper columns for joins
 ```
 
-* **Input**: `{{ $flow.state.sqlQuery }}`
-* **Scenarios**:
-  * Scenario 1: "SQL query is correct and does not contains mistakes"
-  * Scenario 2: "SQL query contains mistakes"
+- **Входные данные:**: `{{ $flow.state.sqlQuery }}`
+- **Сценарии**:
+  - Сценарий 1: "Запрос правильный и ошибок не содержи"
+  - Сценарий 2: "Обнаружены ошибки в запросе"
 
-This validation step catches common SQL errors before execution.
+Этот шаг помогает выявить типичные SQL-ошибки до выполнения.
 
-### Step 5: Handling Query Regeneration (Error Path)
+### Шаг 5: Обработка ошибок и повторное формирование запроса
 
-For incorrect queries (output 1) from previous Condition Agent node, add a **Loop** node.
+Для неправильных запросов (выход 1) добавьте цикл **Loop**.
 
-<figure><img src="/assets/image (6) (1) (1) (1) (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="375"}
 
-#### Configuration:
+#### Конфигурация:
 
-<figure><img src="/assets/image (7) (1) (1) (1) (1) (1).png" alt="" width="526"><figcaption></figcaption></figure>
+![](/assets/image%20\(7\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="526"}
 
-* **Loop Back To**: "Generate SQL Query"
-* **Max Loop Count**: Set to 5
+- **Loop Back To**: "Генерировать SQL-запрос заново"
+- **Max Loop Count**: Максимальное число итераций: 5
 
-This creates a feedback loop that allows the system to retry query generation when validation fails.
+Это создает цикл, который позволяет повторно генерировать запрос, если обнаружены ошибки.
 
-### Step 6: Executing Valid SQL Queries
+### Шаг 6: Выполнение валидного SQL-запроса
 
-For correct queries (output 0), add a **Custom Function** node.
+Добавьте узел **Custom Function** для выполнения запроса.
 
-<figure><img src="/assets/image (8) (1) (1) (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
+![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="375"}
 
-#### Configuration:
+#### Конфигурация:
 
-<figure><img src="/assets/image (9) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(9\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-* **Input Variables**: Here we pass in the generated SQL query as variable to be used in Function.
-  * Variable Name: "sqlQuery"
-  * Variable Value: `{{ $flow.state.sqlQuery }}`
-* **Javascript Function**: This function executes the validated SQL query against the database and formats the results.
+- **Input Variables**: Здесь мы передаем сгенерированный SQL-запрос в качестве переменной для использования в функции..
+  - Имя переменной: "sqlQuery"
+  - Значение переменной: `{{ $flow.state.sqlQuery }}`
+- **Javascript Function**: Эта функция выполняет валидированный SQL-запрос против базы данных и форматирует результаты.
 
 ```javascript
 const { DataSource } = require('typeorm');
@@ -266,101 +268,101 @@ await runSQLQuery(sqlQuery);
 return formattedResult;
 ```
 
-### Step 7: Checking Query Execution Results
+### Шаг 7: Проверка результатов выполнения запроса
 
-Add a **Condition Agent** node connected to the "Run SQL Query" function.
+Добавьте условный узел **Condition Agent**, который проверяет, корректны ли результаты.
 
-<figure><img src="/assets/image (10) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(10\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Instructions**: "You are a SQL expert. Check if the query result is correct or contains error."
-* **Input**: `{{ customFunctionAgentflow_1 }}`
-* **Scenarios**:
-  * Scenario 1: "Result is correct and does not contains error"
-  * Scenario 2: "Result query contains error"
+- **Инструкции**: "Вы — эксперт по SQL, проверьте, правильны ли результаты выполнения запроса или есть ошибки."
+- **Входные данные**: `{{ customFunctionAgentflow_1 }}`
+- **Сценарии**:
+  - Сценарий 1: "Результат правильный, ошибок нет"
+  - Сценарий 2: "Обнаружена ошибка при выполнении запроса"
 
-This step validates the execution results and determines if further correction is needed.
+Этот шаг помогает определить, нужно ли исправлять запрос.
 
-### Step 8: Generating Final Response (Success Path)
+### Шаг 8: Формирование финального ответа (успешный путь)
 
-For successful results (output 0 from Condition Agent), add an **LLM** node.
+Для успешных результатов (output 0 от Condition Agent) добавьте узел **LLM**.
 
-<figure><img src="/assets/image (11) (1) (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
+![](/assets/image%20\(11\)%20\(1\)%20\(1\)%20\(1\).png){width="375"}
 
-#### Configuration:
+#### Конфигурация:
 
-* **Input Message**: `{{ customFunctionAgentflow_1 }}`
+- **Входящее сообщение**: `{{ customFunctionAgentflow_1 }}`
 
-This node generates a natural language response based on the successful query results.
+Этот узел генерирует ответ на естественном языке на основе успешных результатов запроса.
 
-### Step 9: Handling Query Regeneration (Runtime Error Path)
+### Шаг 9: Обработка ошибок выполнения (путь при ошибке)
 
-For failed executions (output 1 from Condition Agent), add an **LLM** node.
+Для неуспешных выполнений (output 1 от Condition Agent) добавьте узел **LLM**.
 
-<figure><img src="/assets/image (12) (1) (1) (1).png" alt="" width="375"><figcaption></figcaption></figure>
+![](/assets/image%20\(12\)%20\(1\)%20\(1\)%20\(1\).png){width="375"}
 
-#### Configuration:
+#### Конфигурация:
 
-<figure><img src="/assets/image (13) (1) (1) (1).png" alt="" width="399"><figcaption></figcaption></figure>
+![](/assets/image%20\(13\)%20\(1\)%20\(1\)%20\(1\).png){width="399"}
 
-* **Messages**: Add the same system message as Step 3
-* **Input Message**:
+- **Сообщения**: Добавьте то же системное сообщение, что и на шаге 3
+- **Входящее сообщение**:
 
+```text
+Учитывая сгенерированный SQL-запрос: {{ $flow.state.sqlQuery }}
+У меня возникает следующая ошибка: {{ customFunctionAgentflow_1 }}
+Сгенерируйте новый SQL-запрос, который исправит ошибку
 ```
-Given the generated SQL Query: {{ $flow.state.sqlQuery }}
-I have the following error: {{ customFunctionAgentflow_1 }}
-Regenerate a new SQL Query that will fix the error
-```
 
-* **JSON Structured Output**: Same as Step 3
-* **Update Flow State**: Set key "`sqlQuery`" with value `{{ output.sql_query }}`
+- **JSON-структурированный выводt**: тот же, что на шаге 3
+- **Обновление состояния потока**: установить ключ `sqlQuery` со значением `{{ output.sql_query }}`
 
-This node analyzes runtime errors and generates corrected SQL queries.
+Этот узел анализирует ошибки выполнения и генерирует исправленные SQL-запросы.
 
-### Step 10: Adding the Second Loop Back
+### Шаг 10: Добавление второго обратного цикла
 
-Add a **Loop** node connected to the "Regenerate SQL Query" LLM.
+Добавьте узел **Loop**, соединённый с "Regenerate SQL Query" (Перегенерировать SQL-запрос) LLM.
 
-<figure><img src="/assets/image (14) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(14\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Configuration:
+#### Настройка:
 
-* **Loop Back To**: "Check SQL Query"
-* **Max Loop Count**: Set to 5
+- **Loop Back To**: "Check SQL Query" (Повторить проверку SQL-запроса)
+- **Max Loop Count**: установить значение 5
 
-This creates a second feedback loop for runtime error correction.
+Это создает второй цикл обратной связи для исправления ошибок во время выполнения.
 
-***
+---
 
-## Complete Flow Structure
+## Полная структура потока
 
 {% file src="/assets/SQL Agent.json" %}
 
-***
+---
 
-## Summary
+## Краткое содержание
 
-1. Start → Get DB Schema
-2. Get DB Schema → Generate SQL Query
-3. Generate SQL Query → Check SQL Query
-4. Check SQL Query (Correct) → Run SQL Query
-5. Check SQL Query (Incorrect) → Regenerate Query (Loop back)
-6. Run SQL Query → Check Result
-7. Check Result (Success) → Return Response
-8. Check Result (Error) → Regenerate SQL Query
-9. Regenerate SQL Query → Recheck SQL Query (Loop back)
+1. Старт → Получить схему базы данных (Get DB Schema)
+2. Получить схему БД → Сгенерировать SQL-запрос
+3. Сгенерировать SQL-запрос → Проверить SQL-запрос
+4. Проверить SQL-запрос (правильный) → Выполнить SQL-запрос
+5. Проверить SQL-запрос (неверный) → Перегенерировать запрос (цикл)
+6. Выполнить SQL-запрос → Проверить результат
+7. Проверить результат (успешно) → Вернуть ответ
+8. Проверить результат (ошибка) → Перегенерировать SQL-запрос
+9. Повторная генерация SQL-запроса → Повторная проверка SQL-запроса (цикл)
 
-***
+---
 
-## Testing Your SQL Agent
+## Тестирование вашего SQL-агента
 
-Test your agent with various types of database questions:
+Проверьте своего агента, ответив на различные вопросы по базе данных:
 
-* Simple queries: "Show me all customers"
-* Complex queries: "What are the top 5 products by sales?"
-* Analytical queries: "Calculate the average order value by month"
+- Простые запросы: «Показать мне всех клиентов»
+- Сложные запросы: «Какие 5 товаров лидируют по объему продаж?»
+- Аналитические запросы: «Рассчитать среднюю стоимость заказа по месяцам»
 
-<figure><img src="/assets/image (15) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(15\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-This SQL Agent flow provides a robust, self-correcting system for database interactions that can handle SQL queries in natural language.
+Этот поток SQL Agent обеспечивает надежную, самокорректирующуюся систему для взаимодействия с базой данных, которая может обрабатывать SQL-запросы на естественном языке.

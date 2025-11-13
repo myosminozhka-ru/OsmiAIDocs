@@ -1,181 +1,164 @@
 # Structured Output
 
-In numerous use cases, such as chatbots, models are expected to reply to users in natural language. However, there are situations where natural language responses aren’t ideal. For instance, if we need to take the model’s output, pass it as a body for HTTP request, or store into a database, it's essential that the output aligns with a predefined schema. This requirement gives rise to the concept of **structured output**, where models are guided to generate responses in a specific, structured format.
+Во многих случаях использования, таких как чат-боты, от моделей ожидается ответ в естественном языке. Однако есть ситуации, когда ответы в естественной речи не идеально подходят. Например, если нужно взять вывод модели, передать его в качестве тела HTTP-запроса или сохранить в базу данных, важно, чтобы результат соответствовал заранее определенной схеме. Это приводит к концепции структурированного вывода, когда модели направляют генерировать ответы в конкретном, структурированном формате.
+В этом учебном пособии мы рассмотрим, как получить структурированный вывод от LLM и передать его в качестве тела HTTP-запроса.
 
-In this tutorial we are going to take a look at how to generate a structured output from LLM, and pass it as the body for HTTP request.
+## Предварительные условия
 
-## Prerequisite
+Для HTTP-запросов мы будем использовать тот же [сервер](interacting-with-api#prerequisite) управления событиями.
 
-We are going to use the same [Event Management Server](interacting-with-api.md#prerequisite) for HTTP request.
+Вот руководство по созданию структурированного потока в формате, соответствующем вашей документации "Agent as Tool", с пошаговыми разъяснениями и запасными изображениями.
 
-Absolutely! Here’s a tutorial for your **Structured Output Flow** in a format consistent with your "Agent as Tool" documentation, including step-by-step explanations and image placeholders.
+---
 
-***
+## Обзор
 
-## Overview
+1. Получение пользовательского ввода через начальный узел.
+2. Использование LLM для генерации структурированного JSON-массива.
+3. Проход по каждому элементу массива.
+4. Отправка каждого элемента на внешний endpoint через HTTP.
 
-1. Receives user input through a Start node.
-2. Uses an LLM to generate a structured JSON array.
-3. Loops through each item in the array.
-4. Sends each item via HTTP to an external endpoint.
+![](/assets/image%20\(306\).png)
 
-<figure><img src="/assets/image (306).png" alt=""><figcaption></figcaption></figure>
+### Шаг 1: Настройка начального узла Добавьте начальный узел на вашу схему.
 
-### Step 1: Setting Up the Start Node
+![](/assets/image%20\(307\).png){width="417"}
 
-Begin by adding a **Start** node to your canvas.
+Основные параметры ввода:
 
-<figure><img src="/assets/image (307).png" alt="" width="417"><figcaption></figcaption></figure>
+- **Тип ввода::**
+  - `chatInput` (по умолчанию): Поток начинается с сообщения чата от пользователя..
+  - `formInput`: Поток начинается с формы (если нужно собрать структурированные данные от пользователя).
+- **Эфемерная память:**
+  - (Опционально) Если включена, история чата не сохраняется между запусками..
+- **Состояние потока:**
+  - (Опционально) Предзаполнение переменных состояния.
+  - Пример:
+    ```json
+    [
+      { "key": "answers", "value": "" }
+    ]
+    ```
+- **Сохранение состояния:**
+  - (Опционально) При включении состояние сохраняется в течение сессии.
 
-**Key Input Parameters:**
+### Шаг 2: Генерация структурированного вывода с помощью LLM
 
-* **Input Type:**
-  * `chatInput` (default): The flow starts with a chat message from the user.
-  * `formInput`: The flow starts with a form (if you want to collect structured data from the user).
-* **Ephemeral Memory:**
-  * (Optional) If enabled, the flow does not retain chat history between runs.
-* **Flow State:**
-  * (Optional) Pre-populate state variables.
-  *   Example:
+Добавьте узел LLM и соедините его с начальным узлом.
 
-      ```json
-      [
-        { "key": "answers", "value": "" }
-      ]
-      ```
-* **Persist State:**
-  * (Optional) If enabled, the state is persisted across the same session.
+![](/assets/image%20\(308\).png){width="563"}
 
-### Step 2: Generating Structured Output with LLM
+**Цель:** использовать языковую модель для анализа ввода и создания структурированного JSON-массива.
 
-Add a LLM node and connect it to the Start node.
+**Ключевые параметры:**
 
-<figure><img src="/assets/image (308).png" alt="" width="563"><figcaption></figcaption></figure>
-
-**Purpose:** Uses a language model to analyze the input and generate a structured JSON array.
-
-**Key Input Parameters:**
-
-* **JSON Structured Output:**
-  * **Key:** `answers`
-  * **Type:** `JSON Array`
-  *   **JSON Schema:**
-
-      ```json
+- **JSON Structured Output:**
+  - **Ключ:** `answers`
+  - **Тип:** `JSON Array`
+  - **JSON Schema:**
+    ```json
+    {
+      "name": { "type": "string", "required": true, "description": "Name of the event" },
+      "date": { "type": "string", "required": true, "description": "Date of the event" },
+      "location": { "type": "string", "required": true, "description": "Location of the event" }
+    }
+    ```
+  - **Описание:** "answer to user query"
+- **Обновление состояния потока:**
+  - Обновляет переменные состояния с созданным JSON-выводом.
+  - Пример:
+    ```json
+    [
       {
-        "name": { "type": "string", "required": true, "description": "Name of the event" },
-        "date": { "type": "string", "required": true, "description": "Date of the event" },
-        "location": { "type": "string", "required": true, "description": "Location of the event" }
+        "key": "answers",
+        "value": "{{ output.answers }}"
       }
-      ```
-  * **Description:** "answer to user query"
-* **Update Flow State:**
-  * Updates the flow state with the generated JSON output.
-  *   Example:
-
-      ```json
-      [
-        {
-          "key": "answers",
-          "value": "{{ output.answers }}"
-        }
-      ]
-      ```
-
-### Step 3: Looping Through the JSON Array
-
-Add an Iteration node and connect it to the output of the LLM node.
-
-<figure><img src="/assets/image (310).png" alt="" width="563"><figcaption></figcaption></figure>
-
-**Purpose:** Iterates over each item in the generated JSON array from LLM node.
-
-**Key Input Parameters:**
-
-*   **Array Input:**
-
-    * The array to iterate over. Set to the answers from the saved state:
-
-    ```html
-    {{ $flow.state.answers }}
+    ]
     ```
 
-    * This means the node will loop through each event in the answers array.
+### Шаг 3: **Цикл по массиву** JSON
 
-### Step 4: Sending Each Item via HTTP
+Добавьте узел итерации и соедините его с выводом узла LLM.
 
-Inside the loop, add a **HTTP** node.
+![](/assets/image%20\(310\).png){width="563"}
 
-<figure><img src="/assets/image (311).png" alt="" width="563"><figcaption></figcaption></figure>
+Цель: пройтись по каждому элементу сгенерированного JSON-массива.
 
-**Purpose:** For each item in the array, sends an HTTP POST request to a specified endpoint (e.g., `http://localhost:5566/events`).
+Ключевые параметры:
 
-**Key Input Parameters:**
+- Входной массив:
+  - Установите на значение переменной answers из сохраненного состояния:
+  ```html
+  {{ $flow.state.answers }}
+  ```
+  - Это обеспечит перебор каждого события в массиве answers.
 
-* **Method:**
-  * `POST` (default for this use case).
-* **URL:**
-  * The endpoint to send data to.
-  *   Example:
+### Шаг 4: Отправка каждого элемента через HTTP
 
-      ```
-      http://localhost:5566/events
-      ```
-* **Headers:**
-  * (Optional) Add any required HTTP headers (e.g., for authentication).
-* **Query Params:**
-  * (Optional) Add any query parameters if needed.
-* **Body Type:**
-  * `json` (default): Sends the body as JSON.
-* **Body:**
-  * The data to send in the request body.
-  *   Set to the current item in the loop:
+Внутри цикла добавьте HTTP-узел.
 
-      ```html
-      {{ $iteration }}
-      ```
-* **Response Type:**
-  * `json` (default): Expects a JSON response.
+![](/assets/image%20\(311\).png){width="563"}
 
-***
+**Цель:** для каждого элемента массива отправлять POST-запрос на указанный эндпоинт, например, `http://localhost:5566/events`.
 
-## Example Interactions
+**Ключевые параметры:**
 
-**User Input:**
+- **Метод:**
+  - POST (по умолчанию для этой задачи).
+- **URL:**
+  - Эндпоинт для отправки данных.
+- **Headers(Заголовки):**
+  - (Опционально) любые необходимые HTTP-заголовки (например, авторизация).
+- **Параметры запроса:**
+  - (Опционально) любые дополнительные параметры.
+- **Тип тела:**
+  - `json` (по умолчанию): Отправляет тело как JSON.
+- **Тело:**
+  - Данные для отправки в теле запроса.
+  - Установить текущий элемент в цикле:
+    ```html
+    {{ $iteration }}
+    ```
+- **Тип ответа:**
+  - `json` (по умолчанию): Ожидается ответ в формате JSON.
 
-```
+---
+
+## Примеры взаимодействий
+
+**Ввод пользователя:**
+
+```text
 create 2 events:
 1. JS Conference on next Sat in Netherlands
 2. GenAI meetup, Sept 19, in Dublin
 ```
 
-**Flow:**
+**Поток:**
 
-* Start node receives the input.
-* LLM node generates a JSON array of events.
-* Loop node iterates through each event.
-* HTTP node create each event via the API.
+- Начальный узел получает входные данные.
+- Узел LLM генерирует JSON-массив событий.
+- Узел цикла проходит по каждому событию.
+- Узел HTTP создает каждое событие через API.
 
-<figure><img src="/assets/image (304).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(304\).png)![](/assets/image%20\(305\).png)
 
-<figure><img src="/assets/image (305).png" alt=""><figcaption></figcaption></figure>
+---
 
-***
-
-## Complete Flow Structure
+## Полная структура потока
 
 {% file src="/assets/Structured Output.json" %}
 
-***
+---
 
-## Best Practices
+## Лучшие практики
 
-**Design Guidelines:**
+**Рекомендации по проектированию:**
 
-1. **Clear Output Schema:** Define the expected structure for the LLM output to ensure reliable downstream processing.
+1. **Четкая схема вывода:**: определите ожидаемую структуру вывода LLM, чтобы обеспечить надежную последующую обработку.
 
-**Common Use Cases:**
+**Распространенные варианты использования:**
 
-* **Event Processing:** Collect and send event data to a calendar or event management system.
-* **Bulk Data Entry:** Generate and submit multiple records to a database or API.
-* **Automated Notifications:** Send personalized messages or alerts for each item in a list.
+- **Обработка событий:** Сбор и отправка данных о событиях в календарь или систему управления событиями..
+- **Массовый ввод данных:** Создание и отправка нескольких записей в базу данных или API.
+- **Автоматические уведомления:** Отправляйте персонализированные сообщения или оповещения для каждого элемента в списке.

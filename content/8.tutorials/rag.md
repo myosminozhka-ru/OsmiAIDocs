@@ -1,50 +1,45 @@
-# RAG
+# RAG (Retrieval-Augmented Generation)
 
-Large Language Models (LLMs) have unlocked the potential to create advanced Q\&A chatbots capable of delivering precise answers based on specific content. These systems rely on a method called Retrieval-Augmented Generation (RAG), which enhances their responses by grounding them in relevant source material.
+Модели крупного языка (LLMs) открыли возможность создания продвинутых чат-ботов с вопросами и ответами, которые способны давать точные ответы на основе конкретных данных. Эти системы используют метод под названием Retrieval-Augmented Generation (RAG), который улучшает их ответы, опираясь на релевантные исходные материалы.
 
-In this tutorial, you’ll learn how to create a basic Q\&A application that can extract and answer questions from given document sources.
+В этом руководстве вы научитесь создавать базовое приложение Q\&A, которое сможет извлекать информацию и отвечать на вопросы по предоставленным документам.
 
-The process can be separated out into 2 sub-processes:
+Процесс можно разбить на два под-процесса:
 
-* Indexing
-* Retrieval
+- Индексирование
+- Поиск (Retrieval)
 
-## Indexing
+## Индексирование
 
-[Document Stores](../using-flowise/document-stores.md) is designed to help with the whole indexing pipelines - retrieveing data from different sources, chunking strategy, upserting to vector database, syncing with updated data.
+Модуль [Document Stores](../using-flowise/document-stores) предназначен для помощи во всей цепочке индексирования — от сбора данных из разных источников, разбиения на части (чанки), апдейта в векторной базе данных и синхронизации с обновляемыми данными.
+Мы поддерживаем широкий спектр загрузчиков документов, включая файлы PDF, Word, Google Drive, а также веб-скраеры, такие как Playwright, Firecrawl, Apify и другие. Также можно создать собственный загрузчик документов.
 
-We support wide range of document loaders, ranging from files like Pdf, Word, Google Drive, to web scrapers like Playwright, Firecrawl, Apify and others. You can also create custom document loader.
+![](/assets/image%20\(293\).png){width="563"}
 
-<figure><img src="/assets/image (293).png" alt="" width="563"><figcaption></figcaption></figure>
+## Поиск (Retrieval)
 
-## Retrieval
+На основе входных данных пользователя ищутся релевантные части документов в векторной базе данных. После этого LLM использует полученный контекст для генерации ответа.
 
-Based on the user's input, relevant document chunks are fetched from vector database. LLM then uses the retrieved context to generate a response.
+1. Добавьте узел агента [Agent](../using-flowise/agentflowv2#id-3.-agent-node), перетащив его и настроив модель для использования.
 
-1. Drag and drop an [Agent](../using-flowise/agentflowv2.md#id-3.-agent-node) node, and configure the model to use.
+![](/assets/image%20\(290\).png){width="391"}
 
-<figure><img src="/assets/image (290).png" alt="" width="391"><figcaption></figcaption></figure>
+2. Создайте новый Knowledge (хранилище документов) и определите содержание, чтобы помочь LLM понять, когда и как извлекать релевантную информацию. Также можно использовать кнопку автоматического генератора, чтобы упростить этот процесс.
 
-2. Add a new Knowledge (Document Store) and define what the content is about. This helps the LLM understand when and how to retrieve relevant information. You can also use the auto-generate button to assist with this process.
+> Можно использовать только те хранилища документов, которые были предварительно добавлены (upserted).
 
-{% hint style="success" %}
-Only upserted document store can be used
-{% endhint %}
+![](/assets/image%20\(288\).png){width="482"}
 
-<figure><img src="/assets/image (288).png" alt="" width="482"><figcaption></figcaption></figure>
+3. (Дополнительно) Если данные уже были сохранены в векторной базе без использования процесса индексирования документа, можно подключиться прямо к базе данных и модели эмбеддингов.
 
-3. (Optional) If the data has already been stored in a vector database without going through the document store indexing pipeline, you can also connect directly to the vector database and embedding model.
+![](/assets/image%20\(289\).png){width="388"}
 
-<figure><img src="/assets/image (289).png" alt="" width="388"><figcaption></figcaption></figure>
+4. Добавьте системный промпт (system prompt) или используйте кнопку Generate для помощи. Мы советуем использовать её, так как это способствует созданию более эффективного и оптимизированного промпта.
 
-4. Add a system prompt, or use the **Generate** button to assist. We recommend using it, as it helps craft a more effective and optimized prompt.
+![](/assets/image%20\(294\).png){width="482"}![](/assets/image%20\(292\).png){width="563"}
 
-<figure><img src="/assets/image (294).png" alt="" width="482"><figcaption></figcaption></figure>
+5. Ваш агент RAG теперь готов к использованию!
 
-<figure><img src="/assets/image (292).png" alt="" width="563"><figcaption></figcaption></figure>
+## Ресурсы
 
-5. Your RAG agent is now ready to use!
-
-## Resources
-
-{% embed url="https://youtu.be/KHc0ClOIv0A?si=mEZJydM8bT2imKJY" %}
+{% embed url="<https://youtu.be/KHc0ClOIv0A?si=mEZJydM8bT2imKJY>" %}

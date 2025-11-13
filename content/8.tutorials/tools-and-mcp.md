@@ -1,19 +1,19 @@
-# Tools & MCP
+# Инструменты и MCP
 
-In the previous [**Interacting with API**](interacting-with-api.md) tutorial, we explored how to enable LLMs to call external APIs. To enhance the user experience, Flowise provides a list of prebuilt tools. Refer to the [**Tools**](../integrations/langchain/tools/) section for the full list of available integrations.
+В предыдущем уроке по взаимодействию с [API](interacting-with-api) мы рассмотрели, как заставить большую языковую модель (LLM) вызывать внешние API. Чтобы улучшить пользовательский опыт, osmi предоставляет список готовых инструментов. Полный список доступных интеграций можно найти в разделе [**Tools**](../integrations/langchain/tools/) .
 
-In cases where the tool you need is not yet available, you can create a **Custom Tool** to suit your requirements.
+Если нужный вам инструмент еще отсутствует, вы можете создать Настраиваемый инструмент **Custom Tool**, чтобы соответствовать вашим требованиям.
 
-## Custom Tool
+## Настраиваемый инструмент (Custom Tool)
 
-We are going to use the same [Event Management Server](interacting-with-api.md#prerequisite), and create a custom tool which can call the HTTP POST request for `/events`.
+Предположим, мы используем тот же сервер управления событиями [Event Management Server](interacting-with-api#prerequisite) и создаем на его базе настраиваемый инструмент, который будет осуществлять POST-запрос на `/events`.
 
-<figure><img src="/assets/image (5) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-* **Tool Name:** `create_event`
-* **Tool Description:** `Use this when you want to create a new event.`
-* **Input Schema:** A JSON schema of the API request body which allows LLM to know how to automatically generate the correct JSON body. For instance:
-* **Javascript Function**: The actual function to execute once this tool is called
+- **Название инструмента:** `create_event`
+- **Описание инструмента:** `Используйте этот инструмент, когда нужно создать новое событие.`
+- **Input Schema (схема ввода):** JSON-схема тела запроса API, которая позволяет LLM автоматически генерировать правильное JSON-уведомление.
+- **JavaScript-функция:**: Это реальная функция, которая выполняется, когда вызывается данный инструмент:
 
 ```javascript
 const fetch = require('node-fetch');
@@ -39,72 +39,77 @@ try {
 }
 ```
 
-### How to use function:
+### Как использовать функцию::
 
-* You can use any libraries imported in Flowise.
-* You can use properties specified in Input Schema as variables with prefix `$`:
-  * Property from Input Schema = `name`
-  * Variable to be used in Function = `$name`
-* You can get default flow config:
-  * `$flow.sessionId`
-  * `$flow.chatId`
-  * `$flow.chatflowId`
-  * `$flow.input`
-  * `$flow.state`
-* You can get custom variables: `$vars.<variable-name>`
-* Must return a string value at the end of function
+- Можно использовать любые библиотеки, импортированные в OSMI.
+- Вы можете использовать свойства, указанные в Входной схеме, как переменные с префиксом `$`:
+  - Свойство из Входной схемы = `name`
+  - Переменная, используемая в функции = `$name`
+- Вы можете получить значение конфигурации по умолчанию для потока:
+  - `$flow.sessionId`
+  - `$flow.chatId`
+  - `$flow.chatflowId`
+  - `$flow.input`
+  - `$flow.state`
+- Дополнительные переменные:: `$vars.<variable-name>`
+- Обязательно: функция должна возвращать строковое значение.
 
-### Use custom tool on Agent
+### **Использовать пользовательского инструмента в Агенте**
 
-After custom tool has been created, you can use it on the Agent node.
+После создания, настраиваемый инструмент можно использовать в узле Agent:
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="341"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="341"}
 
-From the Tool dropdown, select the custom tool. You can also turn on **Return Direc**t if you want to directly return the output from custom tool.
+В выпадающем списке Tool выберите созданный инструмент. Можно включить опцию **Return Direc**, чтобы сразу возвращать вывод инструмента.
 
-<figure><img src="/assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="392"><figcaption></figcaption></figure>
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="392"}
 
-### Use custom tool on Tool
+### Использование как Инструмента (Tool)
 
-It can also be used as a Tool Node in a determined workflow scenario.\
-In this case, **Tool Input Arguments must be explicitly defined and filled with values**, because there is no LLM to automatically determine the values.
+Также инструмент можно применить как узел Tool в заданном сценарии. В этом случае:
 
-<figure><img src="/assets/image (3) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+- Входные аргументы инструмента должны быть явно определены и заполнены значениями, поскольку автоматическое определение значений LLM здесь не работает.
 
-## MCP
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) provides a standardized way to connect AI models to different data sources and tools. In other words, instead of relying on Flowise built in tools or creating custom tool, one can uses MCP servers that have been created by others. MCP is widely considered an industry standard and is typically supported and maintained by the official providers. For example, the GitHub MCP is developed and maintained by the GitHub team, with similar support provided for Atlassian Jira, Brave Search, and others. You can find the list of supported servers [here](https://modelcontextprotocol.io/examples).
+## MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction))
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="413"><figcaption></figcaption></figure>
+- Предоставляет стандартизированный способ подключения AI-моделей к разным источникам данных и инструментам.
+- Вместо встроенных инструментов OSMI или создания собственных, можно использовать MCP-серверы, созданные другими.
+- MCP считается индустриальным стандартом и обычно поддерживается официальными [провайдерами](https://modelcontextprotocol.io/examples)
 
-## Custom MCP
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="413"}
 
-Apart from the prebuilt MCP tools, the most powerful feature is **Custom MCP**, which allows users to connect to any MCP server of their choice.
+## Настраиваемый MCP (Custom MCP)
 
-MCP follows a client-server architecture where:
+Помимо предустановленных MCP-инструментов, можно подключиться к любому MCP-серверу по выбору.
+Архитектура MCP:
 
-* **Hosts** are LLM applications (like Flowise) that initiate connections
-* **Clients** maintain 1:1 connections with servers, inside the host application (like Custom MCP)
-* **Servers** provide context, tools, and prompts to clients (example [servers](https://modelcontextprotocol.io/examples))
+- Хосты: LLM-приложения (например, OSMI), инициирующие соединения.
+- Клиенты: поддерживают 1:1 соединения внутри хост-приложения (например, через собственный MCP).
+- Сервера: предоставляют контекст, инструменты и подсказки для клиентов.
 
-To handle the actual communication between clients and servers. MCP supports multiple transport mechanisms:
+Поддерживаемые механизмы передачи данных:
 
-1. **Stdio transport**
-   * Uses standard input/output for communication
-   * Ideal for local processes
-2. **Streamable HTTP transport**
-   * Uses HTTP with optional Server-Sent Events for streaming
-   * HTTP POST for client-to-server messages
+1. Stdio (стандартные ввод/вывод):
+
+- Использует стандартный ввод/вывод для коммуникации
+- Идеально для локальных процессов
+
+2. Streamable HTTP:
+
+- Использует HTTP с опциональными серверными событиями для потоковой передачи данных
+- HTTP POST для сообщений от клиента к серверу
 
 ### Stdio
 
-Stdio transport enables communication through standard input and output streams. This is particularly useful for local integrations and command-line tools.
+Транспорт Stdio обеспечивает коммуникацию через стандартные потоки ввода и вывода. Это особенно полезно для локальных интеграций и командной строки.
 
-Only use this when using Flowise locally, not when deployed to cloud services. This is because running command like `npx` will install the MCP server package (ex: `@modelcontextprotocol/server-sequential-thinking`)  locally, and it often takes long time for that.&#x20;
+Используйте его только при работе с Flowise локально, а не при развертывании в облачных сервисах. Это связано с тем, что при запуске команд, таких как `npx`, будет устанавливаться пакет MCP-сервера (например,`@modelcontextprotocol/server-sequential-thinking`) локально, и это занимает много времени.
 
-It is more suited for desktop application like Claude Desktop, VS Code etc.
+Этот механизм больше подходит для настольных приложений, таких как Claude Desktop, VS Code и др.
 
-#### **NPX command**
+#### Команда для NPX
 
 ```json
 {
@@ -116,13 +121,14 @@ It is more suited for desktop application like Claude Desktop, VS Code etc.
 }
 ```
 
-<figure><img src="/assets/image (16) (1) (1).png" alt="" width="419"><figcaption></figcaption></figure>
+![](/assets/image%20\(16\)%20\(1\)%20\(1\).png){width="419"}
 
-For Windows, refer to this [guide](https://gist.github.com/feveromo/7a340d7795fca1ccd535a5802b976e1f).
+Для Windows смотрите[руководство](https://gist.github.com/feveromo/7a340d7795fca1ccd535a5802b976e1f).
 
-#### **Docker command**
+#### Docker (контейнеризация)
 
-The Docker command is suitable when the machine running Flowise also has access to Docker. However, it is not suitable for deployments on cloud services where Docker access is restricted or unavailable.
+Подходит, если у машины с OSMI есть доступ к Docker.
+Не рекомендуется для облачных развертываний с ограниченным или отсутствующим доступом к Docker.
 
 ```json
 {
@@ -136,15 +142,15 @@ The Docker command is suitable when the machine running Flowise also has access 
 }
 ```
 
-<figure><img src="/assets/image (312).png" alt="" width="416"><figcaption></figcaption></figure>
+![](/assets/image%20\(312\).png){width="416"}
 
-Docker provides a list of MCP servers, which can be found [here](https://hub.docker.com/catalogs/mcp). Here's how it works:
+Docker предоставляет список MCP-серверов, который можно найти [здесь](https://hub.docker.com/catalogs/mcp). Вот как это работает:
 
-1. Make sure Docker is running.
-2. Locate the MCP server configuration and add it to **Custom MCP**. For example: [https://hub.docker.com/r/mcp/sequentialthinking](https://hub.docker.com/r/mcp/sequentialthinking)
-3. Refresh the **Available Actions**. If the image is not found locally, Docker will automatically pull the latest image. Once the image is pulled, you will see the list of available actions.
+1. Убедитесь, что Docker запущен.
+2. Найдите конфигурацию MCP-сервера и добавьте ее в Custom MCP (например, <https://hub.docker.com/r/mcp/sequentialthinking>).
+3. При первой попытке запустить, Docker автоматически загрузит последнюю версию образа. После загрузки, у вас появится список доступных действий.
 
-```
+```text
 Unable to find image 'mcp/sequentialthinking:latest' locally
 latest: Pulling from mcp/sequentialthinking
 f18232174bc9: Already exists
@@ -161,26 +167,27 @@ Status: Downloaded newer image for mcp/sequentialthinking:latest
 Sequential Thinking MCP Server running on stdio
 ```
 
-#### When to use
+#### Когда использовать MCP
 
-* Building command-line tools
-* Implementing local integrations
-* Needing simple process communication
-* Working with shell scripts
+- Создание командных утилит
+- Локальные интеграции
+- Простое межпроцессное взаимодействие
+- Работа с shell-скриптами
+- streamable HTTP (рекомендуется)
 
-### Streamable HTTP (Recommended)
+### Потоковый HTTP (рекомендуется)
 
-We will use Github Remote MCP as an example. The beautiful part of [Remote GitHub MCP server](https://github.com/github/github-mcp-server), you don’t need to install or run it locally, new updates are applied automatically.
+Мы будем использовать Github Remote MCP в качестве примера. Прелесть удалённого сервера MCP на GitHub в том, что его не нужно устанавливать или запускать локально — обновления внедряются автоматически.
 
-#### Step 1: Create a variable for Github PAT
+#### Шаг 1: Создайте переменную для PAT (личного токена доступа) GitHub
 
-In order to access the MCP server, we need to create a Personal Access Token from Github. Refer to [guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic). Once PAT has been created, create a variable to store the token. This variable will be used in Custom MCP.
+Чтобы получить доступ к серверу MCP, необходимо создать персональный токен доступа (PAT) на GitHub. См. руководство. После создания PAT создайте переменную для хранения этого токена. Эта переменная будет использоваться в Custom MCP.
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="508"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="508"}
 
-#### Step 2: Create Custom MCP
+#### Step 2: Создание Custom MCP
 
-Create an Agent node, and add a new Custom MCP tool. For streamable HTTP, we just need to put in the URL and other necessary headers. You can use [variables](../using-flowise/variables.md) in the MCP Server Config with double curly braces `{{ }}` and prefix `$vars.<variableName>`.
+Создайте узел агента (Agent), и добавьте новый инструмент Custom MCP. Для потокового HTTP нам нужно просто ввести URL и другие необходимые заголовки. В конфигурации сервера MCP вы можете использовать [переменные](../using-flowise/variables), заключённые в двойные фигурные скобки `{{ }}`, а также префикс `$vars.<variableName>`
 
 ```json
 {
@@ -191,32 +198,32 @@ Create an Agent node, and add a new Custom MCP tool. For streamable HTTP, we jus
 }
 ```
 
-<figure><img src="/assets/image (2) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="414"><figcaption></figcaption></figure>
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="414"}
 
-#### Step 3: Select the actions
+#### Шаг 3: Выберите действия
 
-If the MCP server configuration is working correctly, you can refresh the **Available Actions**, and Flowise will automatically pull in all available actions from the MCP server.
+Если конфигурация сервера MCP работает правильно, вы можете обновить список Доступных действий, и Flowise автоматически подтянет все доступные действия с сервера MCP.
 
-<figure><img src="/assets/image (3) (1) (1) (1) (1) (1) (1).png" alt="" width="359"><figcaption></figcaption></figure>
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="359"}
 
-#### Example Interactions:
+#### Пример взаимодействий:
 
-> Give me the most recent issue
+> Сделайте запрос: «Расскажи мне о самой последней проблеме»
 
-<figure><img src="/assets/image (4) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(4\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)
 
-The agent is able to identify the appropriate actions from MCP and use them to answer the user's query.
+Агент способен определить подходящие действия из MCP и использовать их для ответа на запрос пользователя.
 
-#### When to use
+#### Когда использовать
 
-Use Streamable HTTP when:
+Используйте потоковый HTTP, когда:
 
-* Building web-based integrations
-* Needing client-server communication over HTTP
-* Requiring stateful sessions
-* Supporting multiple concurrent clients
-* Implementing resumable connections
+- Создаёте веб-ориентированные интеграции
+- Нужно взаимодействие клиент-сервер по протоколу HTTP
+- Требуются сессионные состояния
+- Поддерживаются несколько одновременных клиентов
+- Реализуются возобновляемые соединения
 
-## Video Tutorial
+## Видеоурок
 
-{% embed url="https://youtu.be/7FClI-QM3tk?si=zBNEShd3NlcrOBrO" %}
+{% embed url="<https://youtu.be/7FClI-QM3tk?si=zBNEShd3NlcrOBrO>" %}

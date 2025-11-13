@@ -1,56 +1,56 @@
 # If Else
 
-Flowise allows you to split your chatflow into different branches depending on If/Else condition.
+OSMI позволяет разделять ваш чат-поток на разные ветви в зависимости от условий If/Else.
 
-<figure><img src="..//assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (2) (1).png" alt=""><figcaption></figcaption></figure>
+![](..//assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png)
 
-### Input Variables
+### Входные переменные
 
-<figure><img src="..//assets/image (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](..//assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)
 
-As noticed from the image above, it takes in any nodes that has `json` output. Some examples are: Custom Function, LLM Chain Output Prediction, Get/Set Variables.
+Как видно на изображении выше, переменные могут поступать из любых узлов, которые выводят JSON-данные. Некоторые примеры таких узлов:
 
-<figure><img src="..//assets/image (2) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](..//assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png)
 
-You can then give a variable name:
+Затем можно задать имя переменной:
 
-<figure><img src="..//assets/image (3) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](..//assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-This variable can then be used in the [If Function](if-else.md#if-function) and [Else Function](if-else.md#else-function) with the prefix `$`. For example:
+Это имя переменной можно использовать в функциях If и Else с префиксом $. Например:
 
-```
+```text
 $output
 ```
 
 ### If Else Name
 
-You can name the node for easier visualization of what it does.
+Вы можете назвать узел для удобной визуализации того, что он делает.
 
 ### If Function
 
-This is a piece of JS code that is ran on Node sandbox. It must:
+Это фрагмент кода JS, который выполняется в песочнице Node. Он должен:
 
-* Contains the `if` statement
-* Returns a value within `if` statement
+- содержать оператор `if`
+- возвращать значение внутри условия `if`
 
-<figure><img src="..//assets/image (5) (1) (1) (1) (1) (1) (1) (1) (1) (1) (1) (2) (1) (1).png" alt="" width="312"><figcaption></figcaption></figure>
+![](..//assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png){width="312"}
 
-This gives much more flexibility for users to do complex comparison like regex, date comparsion and many more.
+Это дает намного большую гибкость для пользователей при выполнении сложных сравнений, например по регулярным выражениям, сравнению дат и многому другому.
 
-### Else Function
+### Функция Else
 
-Similar to If Function, it must returns a value. This function will only be ran if the [If Function](if-else.md#if-function) does not return a value.
+Похожа на функцию If, она должна возвращать значение. Эта функция будет выполняться только в том случае, если функция If не вернула значение.
 
-<figure><img src="..//assets/image (6) (1) (1) (1) (1) (1) (1) (2) (1) (1).png" alt="" width="317"><figcaption></figcaption></figure>
+![](..//assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png){width="317"}
 
-### Output
+### Выход (Output)
 
-<figure><img src="..//assets/image (8) (1) (1) (1) (1) (1) (1) (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](..//assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png)
 
-When the [If Function](if-else.md#if-function) successfully returns a value, it will be passed to the **True** output dot as shown above. This allow users to pass the value to the next node.
+Когда функция [if](if-else#if-function) успешно возвращает значение, оно будет передано в узел вывода True, как показано выше. Это позволяет пользователю передавать значение на следующий узел.
 
-Otherwise, the returned value from [Else Function](if-else.md#else-function) will be passed to the **False** output dot.
+В противном случае возвращенное значение функции Else будет передано в узел вывода False.
 
-User can also take a look at the If Else template in the marketplace:
+Пользователь также может ознакомиться с шаблоном If Else на рынке (marketplace):
 
-<figure><img src="..//assets/image (9) (1) (1) (1) (1) (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
+![](..//assets/image%20\(9\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\)%20\(1\).png)

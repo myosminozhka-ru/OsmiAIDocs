@@ -1,102 +1,102 @@
-# Agent as Tool
+# Агент как инструмент (Agent as Tool)
 
-In this tutorial, we are going to take a look at how to leverage other flows as tools to a parent Agent. This approach allows you to create a parent agent that can delegate specific tasks to specialized child agents
+В этом руководстве мы рассмотрим, как использовать другие потоки как инструменты для родительского агента. Такой подход позволяет создать родительский агент, который может делегировать определённые задачи специализированным дочерним агентам
 
-## Overview
+## Обзор
 
-1. Receives user input through a parent agent
-2. Agent decides to retrieve data from document store, or call the Agentflow Tool.
+1. Получает пользовательский ввод через родительский агент.
+2. Агент решает:
 
-<figure><img src="/assets/image (295).png" alt="" width="375"><figcaption></figcaption></figure>
+- извлечь данные из хранилища документов, или
+- вызвать инструмент Agentflow.
 
-### Step 1: Setting Up the Start Node
+![](/assets/image%20\(295\).png){width="375"}
 
-Begin by adding a **Start** node to your canvas. This serves as the entry point for your agent system.
+### Шаг 1: Настройка стартового узла
 
-### Step 2: Creating the Parent Agent
+Начните с добавления узла **Start** на ваш холст. Этот узел служит точкой входа в систему агента.
 
-Add an **Agent** node and connect it to the Start node.
+### Шаг 2: Создание родительского агента
 
-### Step 3: Configuring the Agent Tool
+Добавьте узел **Agent** и соедините его со стартовым узлом.
 
-The key feature of this flow is configuring another agent as a tool. In the Parent Agent's **Tools** section:
+### Шаг 3: Настройка инструмента агента
 
-<figure><img src="/assets/image (296).png" alt="" width="354"><figcaption></figcaption></figure>
+Главная особенность этого процесса — настройка другого агента как инструмента. В разделе **Tools** родительского агента:
 
-#### Tool Configuration:
+![](/assets/image%20\(296\).png){width="354"}
 
-* **Tool**: Select "**Agent As Tool**"
+#### Конфигурация инструмента:
 
-#### Agent Tool Settings:
+- **Tool (инструмент)**: Выберите "**Agent As Tool**"
 
-* **Selected Agentflow**: Choose your child agentflow
-* **Name**: Name for the agentflow
-* **Description**: Describe when this agentflow is useful. Example:
+#### Настройки агента как инструмента:
 
+- **Selected Agentflow (выбранный поток агента)**: Выберите поток вашего дочернего агента.
+- **Name (имя)**: Задайте название для этого агентфлоу.
+- **Description (описание)**: Опишите, когда этот агентфлоу полезен.
+
+Например:
+
+```text
+Полезен для поиска доступности пользователя, планирования встреч и обработки email-запросов.
 ```
-Useful for searching user availability, scheduling meetings and email related query
-```
 
-{% hint style="warning" %}
-Name and Description for the tool are extremely important! They must be clear and correctly describe the purpose of the tool. Refer to [best practices](https://platform.openai.com/docs/guides/function-calling?api-mode=chat#best-practices-for-defining-functions) guide.
-{% endhint %}
+> Важно: Имя и описание инструмента должны быть ясными и конкретными, четко описывающими его назначение. Обратитесь к руководству по лучшим практикам.
 
-### Step 4: Adding Knowledge Sources
+### Шаг 4: Добавление источников знаний
 
-Configure the **Knowledge (Document Stores)** section to give your parent agent access to relevant information. This is the same as [RAG](rag.md) tutorial.
+Настройте раздел **Knowledge (Document Stores)**), чтобы предоставить вашему родительскому агенту доступ к релевантной информации. Это тот же принцип, что и в руководстве по [RAG](rag).
 
-<figure><img src="/assets/image (297).png" alt="" width="518"><figcaption></figcaption></figure>
+![](/assets/image%20\(297\).png){width="518"}
 
-#### Document Store Configuration:
+#### Конфигурация хранилища документов:
 
-* **Document Store**: Select your pre-configured document store (e.g., "AI-Paper")
-* **Describe Knowledge**: Describe what the knowledge is about
+- **Document Store**: Выберите заранее настроенное хранилище (например, "AI-Paper").
+- **Describe Knowledge**: Опишите, о чём эта база знаний.
 
-***
+---
 
-## Example Interactions
+## Примеры взаимодействий
 
-#### Sample Queries and Expected Behavior:
+#### Запрос на планирование:
 
-**Scheduling Query:**
+- Пользователь: «Можешь проверить мою возможность на следующую вторник?»
+- Поток: Родительский агент → инструмент personal\_assistant → специализированный ответ по планированию
 
-* User: "Can you check my availability for next Tuesday?"
-* Flow: Parent agent → personal\_assistant tool → specialized scheduling response
+![](/assets/image%20\(301\).png){width="563"}
 
-<figure><img src="/assets/image (301).png" alt="" width="563"><figcaption></figcaption></figure>
+Технический запрос:
 
-**Technical Query:**
+- Пользователь: «Что такое AIGC и как он работает?»
+- Поток: Родительский агент → база знаний AI-Paper → техническое объяснение с источниками
 
-* User: "What is AIGC and how does it work?"
-* Flow: Parent agent → AI-Paper knowledge base → technical explanation with sources
+![](/assets/image%20\(300\).png){width="563"}
 
-<figure><img src="/assets/image (300).png" alt="" width="563"><figcaption></figcaption></figure>
+Общий запрос:
 
-**General Query:**
+- Пользователь: «Привет, как дела?»
+- Поток: Родительский агент → прямой ответ (без использования инструментов)
 
-* User: "Hello how are you?"
-* Flow: Parent agent → direct response (no tools needed)
+Сложный запрос:
 
-**Complex Query:**
+- Пользователь: «Запланируй встречу по внедрению AIGC на следующую вторник, выдели ключевые идеи и основные темы для обсуждения»
+- Поток: Родительский агент → одновременно инструмент personal\_assistant и база знаний AI-Paper → скоординированный ответ
 
-* User: "Schedule a meeting about AIGC implementation next Tuesday, extract key insights and the talking points"
-* Flow: Parent agent → both personal\_assistant tool AND AI-Paper knowledge → coordinated response
+![](/assets/image%20\(302\).png){width="563"}
 
-<figure><img src="/assets/image (302).png" alt="" width="563"><figcaption></figcaption></figure>
+---
 
-***
+## Лучшие практики
 
-## Best Practices
+#### Руководство по дизайну:
 
-#### Design Guidelines:
+1. **Четкое описание инструментов:** названия и описания инструментов должны быть конкретными и действенными
+2. **Соответствующее делегирование:** улучшить системный запрос для родительского агента, чтобы он эффективно делегировал задачи
 
-1. **Clear Tool Descriptions**: Make tool name and descriptions specific and actionable
-2. **Appropriate Delegation**: Better system prompt for parent agent to delegate effectively
+#### Распространённые сценарии использования:
 
-#### Common Use Cases:
-
-* **Customer Service**: Parent agent with specialized tools for billing, technical support, and general inquiries
-* **Research Assistant**: Parent with tools for different research domains (legal, technical, market research)
-* **Project Management**: Parent with tools for scheduling, resource allocation, and progress tracking
-* **Content Creation**: Parent with tools for writing, editing, research, and formatting
-
+- **Обслуживание клиентов**: родительский агент со специализированными инструментами для выставления счетов, технической поддержки и общих вопросов
+- **Помощник в исследованиях:** родительский агент с инструментами для различных областей исследований (юридические, технические, рыночные исследования)
+- **Управление проектами:** родительский агент с инструментами для планирования, распределения ресурсов и отслеживания прогресса
+- **Создание контента:** родительский агент с инструментами для написания, редактирования, исследований и форматирования

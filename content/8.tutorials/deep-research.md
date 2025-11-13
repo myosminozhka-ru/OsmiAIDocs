@@ -1,52 +1,52 @@
 # Deep Research
 
-Deep Research Agent is a sophisticated multi-agent system that can conduct comprehensive research on any topic by breaking down complex queries into manageable tasks, deploying specialized research agents, and synthesizing findings into detailed reports.
+Deep Research Agent — это сложная многопроцессорная система, способная проводить всесторонние исследования по любой теме, разбивая сложные запросы на управляемые задачи, задействуя специализированных исследовательских агентов и синтезируя результаты в подробные отчёты.
 
-This approach is inspired by Anthropic's blog - [How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)
+Этот подход вдохновлён блогом Anthropic — [Как мы построили нашу систему многопроцессорных исследований.](https://www.anthropic.com/engineering/built-multi-agent-research-system)
 
-## Overview
+## Обзор
 
-The Deep Research Agent workflow consists of several key components working together:
+Рабочий процесс Deep Research Agent состоит из нескольких ключевых компонентов, взаимодействующих друг с другом:
 
-1. **Planner Agent**: Analyzes the research query and generates a list of specialized research tasks
-2. **Iteration**: Creates multiple research agents to work on different aspects of the query
-3. **Research SubAgents**: Individual agents that conduct focused research using web search and other tools
-4. **Writer Agent**: Synthesizes all findings into a coherent, comprehensive report
-5. **Condition Agent**: Determines if additional research is needed or if the findings are sufficient
-6. **Loop**: Loop back to Planner Agent to improve research quality
+- Planner Agent (планировщик): Анализирует исследовательский запрос и создает список специализированных задач.
+- Итерация: Создает несколько исследовательских агентов, работающих над разными аспектами запроса.
+- Research SubAgents (подагенты исследования): Отдельные агенты, выполняющие целенаправленное исследование с помощью поиска в Интернете и других инструментов.
+- Writer Agent (писатель): Синтезирует все результаты в связной, всесторонней отчёт.
+- Condition Agent (агент условий): Определяет, требуется ли дополнительное исследование или полученных данных достаточно.
+- Цикл: Возврат к Planner Agent для повышения качества исследования.
 
-<figure><img src="/assets/image (12) (1).png" alt=""><figcaption></figcaption></figure>
+![](/assets/image%20\(12\)%20\(1\).png)
 
-### Step 1: Create the Start Node
+### Шаг 1: Создание начального узла
 
-<figure><img src="/assets/image (5) (1) (1) (1).png" alt="" width="168"><figcaption></figcaption></figure>
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\).png){width="168"}
 
-1. Begin by adding a **Start** node to your canvas
-2. Configure the Start node with **Form Input** to collect the research query from users
-3. Set up the form with the following configuration:
-   * **Form Title**: "Research"
-   * **Form Description**: "A research agent that takes in a query, and return a detailed report"
-   * **Form Input Types**: Add a string input with label "Query" and variable name "query"
-4. Initialize the Flow State with two key variables:
-   * `subagents`: To store the list of research tasks to be carried out by subagents
-   * `findings`: To accumulate research results
+1. Начните с добавления узла Start на вашу рабочую область
+2. Настройте узел Start с помощью Form Input для сбора запроса на исследование от пользователей
+3. Настройте форму со следующими параметрами:
+   - Название формы: "Research"
+   - Описание формы: "Агент исследования, который принимает запрос и возвращает детальный отчет"
+   - Типы входных данных формы: Добавьте строковый ввод с меткой "Query" и переменной "query"
+4. Инициализируйте состояние потока двумя ключевыми переменными:
+   - `subagents`: для хранения списка задач исследования, которые будут выполнены субагентами
+   - `findings`: для накопления результатов исследования
 
-<figure><img src="/assets/image (1) (1) (1) (1) (1) (1).png" alt="" width="407"><figcaption></figcaption></figure>
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="407"}
 
-### Step 2: Add the Planner Agent
+### Шаг 2: Добавьте агента планировщика
 
-<figure><img src="/assets/image (6) (1) (1) (1).png" alt="" width="331"><figcaption></figcaption></figure>
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\).png){width="331"}
 
-1. Connect an **LLM** node to the Start node.
-2. Set up the system prompt to act as an expert research lead with the following key responsibilities:
-   * Analyze and break down user queries
-   * Create detailed research plans
-   * Generate specific tasks for subagents
-   * Example prompt - [research\_lead\_agent.md](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts/research_lead_agent.md)
+1. Подсоедините узел LLM к узлу Start.
+2. Настройте системное сообщение так, чтобы оно выполняло роль эксперта по исследовательской деятельности с следующими ключевыми обязанностями:
+   - Анализировать и разбивать запросы пользователя
+   - Создавать подробные планы исследований
+   - Генерировать конкретные задачи для субагентов
+   - Пример подсказки — [research\_lead\_agent.md](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts/research_lead_agent.md)
 
-<figure><img src="/assets/image (2) (1) (1) (1) (1) (1).png" alt="" width="415"><figcaption></figcaption></figure>
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="415"}
 
-3. Configure **JSON Structured Output** to return a list of subagent tasks:
+3. Настройте структурированный вывод JSON, чтобы возвращать список задач для субагентов:
 
 ```json
 {
@@ -57,19 +57,19 @@ The Deep Research Agent workflow consists of several key components working toge
 }
 ```
 
-4. Update the flow state by storing the generated subagents list
+4. Обновите состояние потока, сохранив сгенерированный список субагентов.
 
-<figure><img src="/assets/image (3) (1) (1) (1) (1).png" alt="" width="398"><figcaption></figcaption></figure>
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="398"}
 
-### Step 3: Create the SubAgent Iteration Block
+### Шаг 3: Создайте блок итерации субагентов
 
-<figure><img src="/assets/image (13) (1).png" alt="" width="473"><figcaption></figcaption></figure>
+![](/assets/image%20\(13\)%20\(1\).png){width="473"}
 
-1. Add an **Iteration** node.
-2. Connect it to the Planner output
-3. Configure the iteration input to the flow state: `{{ $flow.state.subagents }}`. For each item in the array, a subagent will be spawned to carry out the research task. Example:
+1. Добавьте узел Iteration.
+2. Подключите его к выходу агента планировщика (Planner).
+3. Настройте вход итерации с использованием состояния потока: `{{ $flow.state.subagents }}`. Для каждого элемента в массиве будет создан субагент, который выполнит исследовательскую задачу.
 
-<figure><img src="/assets/image (8) (1) (1).png" alt="" width="419"><figcaption></figcaption></figure>
+![](/assets/image%20\(8\)%20\(1\)%20\(1\).png){width="419"}
 
 ```json
 {
@@ -84,186 +84,180 @@ The Deep Research Agent workflow consists of several key components working toge
 }  
 ```
 
-### Step 4: Build the Research SubAgent
+### Шаг 4: Создайте исследовательского субагента
 
-1. Inside the iteration block, add an **Agent** node.
-2. Configure the system prompt to act as a focused research subagent with:
-   * Clear task understanding capabilities
-   * Efficient research planning (2-5 tool calls per task)
-   * Source quality evaluation
-   * Parallel tool usage for efficiency
-   * Example prompt - [research\_subagent.md](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts/research_subagent.md)
+1. Внутри блока итерации добавьте узел Agent.
+2. Настройте системное сообщение так, чтобы он выступал как специализированный исследовательский субагент с возможностями:
+   - Возможностями ясного понимания задачи
+   - Эффективно планировать исследование (2–5 вызовов инструментов на задачу)
+   - Оценивать качество источников
+   - Использовать несколько инструментов параллельно для повышения эффективности
+   - Пример подсказки - [research\_subagent.md](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts/research_subagent.md)
 
-<figure><img src="/assets/image (9) (1).png" alt="" width="401"><figcaption></figcaption></figure>
+![](/assets/image%20\(9\)%20\(1\).png){width="401"}
 
-3. Add the following research tools, you can use your own preferred tools:
-   * **Google Search**: For web search links
-   * **Web Scraper**: For web content extraction. This will scrape the content of the links from Google Search.
-   * **ArXiv Search**: For searching and loading content of academic papers
+3. Добавьте следующие инструменты для исследования, вы можете использовать свои предпочитаемые инструменты:
+   - **Google Search**: для поиска ссылок в интернете
+   - **Web Scraper**: для извлечения содержимого веб-страниц. Этот инструмент будет собирать содержимое по ссылкам из Google Search
+   - **ArXiv Search**: для поиска и загрузки содержания академических статей
 
-<figure><img src="/assets/image (11) (1).png" alt="" width="389"><figcaption></figcaption></figure>
+![](/assets/image%20\(11\)%20\(1\).png){width="389"}
 
-4. Set the user message to pass the current iteration task: `{{ $iteration.task }}`
+4. Настройте пользовательское сообщение, чтобы оно передавало текущую задачу итерации: `{{ $iteration.task }}`
 
-### Step 5: Add the Writer Agent
+### Шаг 5: Добавьте агента для написания отчета
 
-<figure><img src="/assets/image (14) (1).png" alt="" width="397"><figcaption></figcaption></figure>
+![](/assets/image%20\(14\)%20\(1\).png){width="397"}
 
-1. Connect a **LLM** node after the iteration completes.
-2. A larger context LLM like Gemini with 1-2 millions context size is needed to synthesize all findings and generate the report.
-3. Set up the system prompt to act as an expert research writer that:
-   * Preserves full context from research findings
-   * Maintains citation integrity
-   * Adds structure and clarity
-   * Outputs professional Markdown reports
-4. Configure the user message to include:
-   * Research topic: `{{ $form.query }}`
-   * Existing findings: `{{ $flow.state.findings }}`
-   * New findings: `{{ iterationAgentflow_0 }}`
+1. Подключите узел LLM после завершения итерации.
+2. Для синтеза всех результатов и генерации отчета потребуется крупная модель LLM, например Gemini с размером контекста 1-2 миллиона.
+3. Настройте системное сообщение так, чтобы он выступал в роли эксперта-исследователя, который:
+   - Сохраняет полный контекст результатов исследования
+   - Поддерживает целостность цитирования
+   - Добавляет структуру и ясность
+   - Выдает профессиональные отчеты в формате Markdown
+4. Настройте пользовательское сообщение, чтобы оно включало:
+   - Тему исследования: `{{ $form.query }}`
+   - Уже собранные результаты: `{{ $flow.state.findings }}`
+   - Новые результаты: `{{ iterationAgentflow_0 }}`
 
-<figure><img src="/assets/image (15) (1).png" alt="" width="399"><figcaption></figcaption></figure>
+![](/assets/image%20\(15\)%20\(1\).png){width="399"}
 
-4. Update the `{{ $flow.state.findings }}` with the output of Write Agent.
+4. Обновите `{{ $flow.state.findings }}` с помощью вывода агента для написания отчета.
 
-<figure><img src="/assets/image (16) (1).png" alt="" width="397"><figcaption></figcaption></figure>
+![](/assets/image%20\(16\)%20\(1\).png){width="397"}
 
-### Step 6: Implement the Condition Check
+### Шаг 6: Реализуйте проверку условия
 
-<figure><img src="/assets/image (17) (1).png" alt="" width="332"><figcaption></figcaption></figure>
+![](/assets/image%20\(17\)%20\(1\).png){width="332"}
 
-1. Add a **Condition Agent.**
-2. Set up the condition logic to determine if additional research is needed
-3. Configure two scenarios:
-   * "More subagents are needed"
-   * "Findings are sufficient"
-4. Provide input context including:
-   * Research topic
-   * Current subagents list
-   * Accumulated findings
+1. Добавьте агент условия.
+2. Настройте логику условия для определения необходимости дополнительного исследования.
+3. Сконфигурируйте два сценария:
+   - "Требуются дополнительные субагенты"
+   - "Результаты достаточны"
+4. Предоставьте входной контекст, включая:
+   - Тему исследования
+   - Текущий список субагентов
+   - Накопленные результаты
 
-<figure><img src="/assets/image (18) (1).png" alt="" width="407"><figcaption></figcaption></figure>
+![](/assets/image%20\(18\)%20\(1\).png){width="407"}
 
-### Step 7: Create the Loop Mechanism
+### Шаг 7: Создайте механизм цикла
 
-1. For the **"More subagents needed"** path, add a **Loop** node
-2. Configure it to loop back to the Planner node
-3. Set a maximum loop count of 5 to prevent infinite loops
-4. Planner Agent will look at the current report, and generate additional research tasks.
+1. Для сценария «Требуются дополнительные субагенты» добавьте узел цикла.
+2. Настройте его так, чтобы он возвращался к узлу Планировщика.
+3. Установите максимочное количество итераций цикла — 5, чтобы избежать бесконечных циклов.
+4. Агент Планировщика будет просматривать текущий отчет и генерировать дополнительные задачи для исследований.
 
-<figure><img src="/assets/image (19) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(19\)%20\(1\).png){width="563"}
 
-### Step 8: Add the Final Output
+### Шаг 8: Добавьте конечный вывод
 
-1. For the "**Findings are sufficient**" path, add a **Direct Reply**
-2. Configure it to output the final report: `{{ $flow.state.findings }}`
+1. Для сценария «Результаты достаточны» добавьте прямой ответ.
+2. Настройте его так, чтобы выводился окончательный отчет: `{{ $flow.state.findings }}`
 
-<figure><img src="/assets/image (20) (1).png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/image%20\(20\)%20\(1\).png){width="563"}![](/assets/image%20\(21\)%20\(1\).png){width="409"}
 
-<figure><img src="/assets/image (21) (1).png" alt="" width="409"><figcaption></figcaption></figure>
+## Тестирование потока
 
-## Testing the Flow
+1. Начните с простой темы, например: «Автономные многогенные системы в реальных условиях».
+2. Наблюдайте, как Планировщик разбивает исследование на целенаправленные задачи.
+3. Следите за тем, как субагенты проводят параллельные исследования.
+4. Просматривайте синтез результатов Агента писателя.
+5. Обратите внимание, запрашивает ли Агент условий дополнительные исследования.
 
-1. Start with a simple topic like "Autonomous Multi-Agent Systems in Real-World Environments"
-2. Observe how the Planner breaks down the research into focused tasks
-3. Monitor the SubAgents as they conduct parallel research
-4. Review the Writer Agent's synthesis of findings
-5. Note whether the Condition Agent requests additional research
+![](/assets/image%20\(22\).png)
 
-<figure><img src="/assets/image (22).png" alt=""><figcaption></figcaption></figure>
-
-**Report Generated:**
+**Отчет создан:**
 
 {% file src="/assets/Deep Research Report.pdf" %}
 
-## Complete Flow Structure
+## Полная структура потока
 
 {% file src="/assets/Deep Research Dynamic SubAgents.json" %}
 
-## Walkthrough
+## Обзор
 
-1. 🧠 Planner Agent - analyzes the research query and generates a list of specialized research tasks
-2. 🖧 Subagents - creates multiple research subagents, conduct focused research using web search, web scrape, and arxiv tools
-3. ✍️ Writer Agent - synthesizes all findings into a coherent, comprehensive report with citations
-4. ⇄ Condition Agent - determines if additional research is needed or if the findings are sufficient
-5. 🔄 Loop back to Planner Agent to generate more subagents
+1. 🧠 Planner Agent - анализирует исследовательский запрос и создает список специализированных исследовательских задач
+2. 🖧 Subagents - создают несколько субагентов для проведения целенаправленных исследований с использованием инструментов веб-поиска, скрапинга и arxiv
+3. ✍️ Writer Agent - синтезирует все результаты в связный, подробный отчет с цитатами
+4. ⇄ Condition Agent - определяет, нужны ли дополнительные исследования или результаты достаточны
+5. 🔄 Возврат к Агенту Планировщика для генерации новых субагентов
 
-### 🧠 Planner Agent
+### 🧠 Агент планировщика:
 
-Act as an expert research lead to:
+Действует как эксперт по исследованиям, который:
 
-* Analyze and break down user queries
-* Create detailed research plans
-* Generate specific tasks for subagents
+- Анализирует и разбивает запросы пользователей
+- Создает подробные планы исследований
+- Генерирует конкретные задачи для субагентов
 
-Output an array of research tasks.
+Выдает массив исследовательских задач
 
-<figure><img src="/assets/Untitled-2025-06-16-1507.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/Untitled-2025-06-16-1507.png){width="563"}
 
-### 🖧 Subagents
+### 🖧 Субагенты
 
-For each task in the tasklist, a new subagent will be spawned to conduct focused research.
+Для каждой задачи создается новый субагент, который занимается целенаправленным исследованием.
 
-Each subagent has:
+Каждый субагент обладает:
 
-* Clear task understanding capabilities
-* Efficient research planning (2-5 tool calls per task)
-* Source quality evaluation
-* Parallel tool usage for efficiency
+- Способностью точно понимать задачу
+- Эффективным планированием (2-5 вызовов инструментов на задачу)
+- Оценкой качества источников
+- Параллельным использованием инструментов для повышения эффективности
 
-<figure><img src="/assets/subagents.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/subagents.png){width="563"}
 
-Subagent has access to web search, web scrape, and arxiv tools.
+Доступные инструменты:
 
-* 🌐 Google Search - for web search links
-* 🗂️ Web Scraper - for web content extraction. This will scrape the content of the links from Google Search.
-* 📑 ArXiv - search, download and read content of arxiv papers
+- 🌐 Google Search - поиск ссылок в интернете
+- 🗂️ Web Scraper - извлечение содержимого страниц, собирать контент по ссылкам
+- 📑 ArXiv - поиск, загрузка и чтение научных статей
 
-<figure><img src="/assets/subagentstool.png" alt="" width="563"><figcaption></figcaption></figure>
+![](/assets/subagentstool.png){width="563"}
 
-### ✍️ Writer Agent
+### ✍️ Агент писатель
 
-Act as a research writer that turn raw findings into a clear, structured Markdown report. Preserve all context and citations.
+Выступает как специалист по написанию исследований, переводит необработанные результаты в ясный, структурированный Markdown-отчет с цитатами. Для таких задач лучше использовать Gemini благодаря его большому размеру контекста.
 
-We find Gemini to be the best for this, thanks to its large context window that allows it to synthesize all the findings effectively.
+![](/assets/writer.png){width="563"}
 
-<figure><img src="/assets/writer.png" alt="" width="563"><figcaption></figcaption></figure>
+### ⇄ Агент условий
 
-### ⇄ Condition Agent
+На основе сгенерированного отчета решает, нужны ли дополнительные исследования или результаты достаточны.
 
-With the generated report, we let the LLM determine whether additional research is needed or if the findings are sufficient.
+Если нужно больше — планировщик генерирует новые задачи, цикл продолжается. Если результаты достаточны — возвращается финальный отчет от Агента писателя.
 
-If more is needed, the Planner Agent reviews all messages, identifies areas for improvement, generates follow-up research tasks, and the loop continues.
+![](/assets/conditions.png){width="563"}
 
-If the findings are sufficient, we simply return the final report from the Writer Agent as the output.
+## Продвиненная настройка
 
-<figure><img src="/assets/conditions.png" alt="" width="563"><figcaption></figcaption></figure>
+#### Настройка глубины исследования:
 
-## Advanced Configuration
+Вы можете настроить глубину исследования, изменив системную подсказку Планировщика следующим образом:
 
-#### Customizing Research Depth
+- Увеличить количество субагентов для сложных тем (до 10-20)
+- Отрегулируйте бюджет вызова инструмента для каждого субагента
+- Измените количество циклов для более итеративного исследования.
 
-You can adjust the research depth by modifying the Planner's system prompt to:
+Однако это также влечет за собой дополнительные расходы за большее потребление токенов.
 
-* Increase the number of SubAgents for complex topics (up to 10-20)
-* Adjust the tool call budget per SubAgent
-* Modify the loop count for more iterative research
+#### Добавление специализированных инструментов
 
-But this also comes with extra cost for more token consumption.
+Расширьте исследовательские возможности, добавив инструменты, специфичные для конкретной области:
 
-#### Adding Specialized Tools
+- Персональные инструменты, такие как Gmail, Slack, Google Calendar, Teams и т. д.
+- Другие веб-скраперы и инструменты веб-поиска, такие как Firecrawl, Exa, Apify и т. д.
 
-Enhance research capabilities by adding domain-specific tools:
+#### Добавление контекста RAG
 
-* Personal tools like Gmail, Slack, Google Calendar, Teams etc
-* Other web scraper, web search tools like Firecrawl, Exa, Apify etc
+С помощью [RAG](rag) вы можете расширить контекст программы LLM . Это позволяет LLM при необходимости извлекать информацию из актуальных существующих источников знаний.
 
-#### Adding RAG Context
+## Лучшие практики
 
-You can add more context to the LLM with [RAG](rag.md). This allows LLM to pull information from relevant existing knowledge sources when needed.
-
-## Best Practices
-
-* Model selection and fallback options are crucial due to the large amount of findings that causes token overflow.
-* Prompting is key. Anthropic open-sourced their entire prompt structure, covering task delegation, parallel tool usage, and thought processes - [https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts](https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts)
-* Tools need to be carefully crafted, when to use, how to limit the length of results returned from tool executions.
-* This is very similar to Trade-off Triangle, where optimizing two of the tree often negatively impacts another, in this case - Speed, Quality, Cost.
+- Выбор модели и запасные варианты имеют решающее значение из-за большого количества результатов, приводящих к переполнению токенов.
+- Подсказки — ключ к успеху. Anthropic открыла исходный код всей своей структуры подсказок, включая делегирование задач, параллельное использование инструментов и мыслительные процессы — <https://github.com/anthropics/anthropic-cookbook/blob/main/patterns/agents/prompts>
+- Инструменты должны быть тщательно разработаны, когда их использовать и как ограничивать длину результатов, возвращаемых при выполнении инструментов.
+- Это очень похоже на компромиссный треугольник, где оптимизация двух компонентов дерева часто негативно влияет на другой, в данном случае — на скорость, качество, стоимость.

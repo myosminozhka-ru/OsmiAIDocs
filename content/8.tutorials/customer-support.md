@@ -1,22 +1,22 @@
 # Customer Support
 
-Customer support is one of the biggest use cases in AI right now. However, many people tend to overcomplicate it by introducing multiple agents. In many cases, you can achieve the desired outcome with a single agent, provided you have a well-crafted system prompt, carefully selected tools, and a curated knowledge base. A multi-agent architecture is typically only necessary if your system needs to handle a wide range of support areas. For example, you might have an HR agent that manages HR policies and executes tasks like submitting leave requests or updating employee records, and a finance agent that handles reimbursements, refunds, and other finance-related queries.
+Поддержка клиентов — один из самых распространённых вариантов использования искусственного интеллекта на сегодняшний день. Однако многие склонны чрезмерно усложнять её, добавляя несколько агентов. Во многих случаях желаемого результата можно добиться с помощью одного агента, при условии наличия хорошо продуманной системы подсказок, тщательно подобранных инструментов и тщательно подобранной базы знаний. Многоагентная архитектура обычно необходима только в том случае, если ваша система должна охватывать широкий спектр областей поддержки. Например, у вас может быть агент отдела кадров, который управляет кадровыми политиками и выполняет такие задачи, как подача заявлений на отпуск или обновление личных дел сотрудников, а также финансовый агент, который занимается возмещением средств, возвратами и другими финансовыми вопросами.
 
-When your system involves more than 15 or 20 tools and knowledge sources, it's generally not advisable to overload a single agent. Instead, having dedicated agents for specific domains tends to perform better. Depending on your use case, we always recommend starting with a single agent, evaluating performance, identifying bottlenecks, and only then considering a multi-agent architecture.
+Если ваша система включает более 15–20 инструментов и источников знаний, обычно не рекомендуется перегружать одного агента. Вместо этого, как правило, лучше использовать отдельных агентов для определённых областей. В зависимости от вашего варианта использования мы всегда рекомендуем начать с одного агента, оценить производительность, выявить узкие места и только затем рассматривать многоагентную архитектуру.
 
-Anthropic provides a good guide on this - [https://docs.anthropic.com/en/docs/about-claude/use-case-guides/customer-support-chat](https://docs.anthropic.com/en/docs/about-claude/use-case-guides/customer-support-chat)
+Anthropic предоставляет хорошее руководство по этому вопросу - <https://docs.anthropic.com/en/docs/about-claude/use-case-guides/customer-support-chat>
 
-## Single Agent
+## Единый агент
 
-<figure><img src="/assets/image (331).png" alt="" width="361"><figcaption></figcaption></figure>
+![](/assets/image%20\(331\).png){width="361"}
 
-For a single-agent, prompting is the most crucial part. Every model behaves differently. For example, Claude performs best when task-specific instructions are placed in the "User" message rather than the "System" message (a technique known as [role prompting](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/system-prompts#legal-contract-analysis-with-role-prompting)). It's often a process of trial and error to determine what works best. Nevertheless, good prompts consist of the following fundamentals:
+Для одиночного агента подсказки — важнейшая часть. Каждая модель ведёт себя по-своему. Например, Клод работает лучше всего, когда инструкции по конкретной задаче помещаются в сообщение «Пользователь», а не в сообщение «Система» (метод, известный как ролевые подсказки ). Часто приходится методом проб и ошибок определять, что работает лучше всего. Тем не менее, хорошие подсказки включают в себя следующие основные принципы:
 
-#### Step 1: Role
+#### Шаг 1: Роль
 
-First step is to assign a role and personality to the agent. For example:
+Первый шаг — назначить роль и личность агенту. Например:
 
-```
+```text
 You are John, a friendly, knowledgeable, and professional customer support agent for Acme Events, an event management company that has been delivering exceptional events since 1985.
 
 Your job is to help customers with any inquiries related to Acme’s event services, including:
@@ -32,11 +32,11 @@ Your job is to help customers with any inquiries related to Acme’s event servi
 You are warm, helpful, and solution-oriented. Always aim to resolve customer issues efficiently while maintaining a positive tone. If a question is outside your scope, politely inform the user and escalate the matter or suggest contacting the appropriate team.
 ```
 
-#### Step 2: Guidelines
+#### Шаг 2: Рекомендации
 
-How you want the agent to respond to a user query, a set of steps or guidelines to follow.
+Как вы хотите, чтобы агент отреагировал на запрос пользователя, набор шагов или рекомендаций, которым нужно следовать.
 
-```
+```text
 Important guidelines:
 
 - Always introduce yourself as John from Acme Events.
@@ -50,15 +50,13 @@ Important guidelines:
 - For time-sensitive inquiries, suggest calling the customer service number if it's during business hours.
 ```
 
-{% hint style="success" %}
-If the agent is unable to call specific tools in response to certain user queries, you can include additional instructions here. For example: _“Use the quoting tool to generate a personalized quote.”_
-{% endhint %}
+> Если агент не может вызвать определённые инструменты в ответ на определённые запросы пользователей, вы можете добавить здесь дополнительные инструкции. Например: «Используйте инструмент для создания персонализированного коммерческого предложения».
 
-#### Step 3: Business Context
+#### Шаг 3: Бизнес-контекст
 
-Provide general information of the company. For example:
+Предоставьте общую информацию о компании. Например:
 
-```
+```text
 About Acme Events:
  
 At Acme Events, we believe every occasion is a story waiting to be told. Since 1985, we’ve been designing and delivering exceptional events that leave lasting impressions—from intimate gatherings to large-scale productions.  
@@ -81,66 +79,67 @@ Business hours: Monday–Friday, 9 AM – 5 PM EST
 Customer service number: 1-800-123-4567
 ```
 
-#### Step 4: Provide Examples
+#### Шаг 4: Приведите примеры
 
-It’s also very important to teach the agent how to respond to user queries by providing examples, a technique known as few-shot prompting.
+Также очень важно научить агента отвечать на запросы пользователей, приводя примеры. Этот прием известен как краткое подсказывание.
 
-<pre><code>Here are a few examples of how you can interact with customers:
+```text
+Here are a few examples of how you can interact with customers:
 
-&#x3C;example 1>
+<example 1>
 H: Hi, do you organize birthday parties for kids?
 
 A: Hi there! I'm John from Acme Events—thanks for reaching out. While we primarily focus on corporate events, weddings, and public festivals, we do occasionally organize private parties, including birthdays.
 
 Could you share more details about the party you're planning (e.g., number of guests, location, and date)? I'd be happy to see how we can help!
-&#x3C;/example 1>
+</example 1>
 
-&#x3C;example 2>
+<example 2>
 H: What are your business hours?
 
 A: Our business hours are Monday to Friday, 9 AM to 5 PM EST.
 
 If you have any event-related questions or need planning assistance, feel free to reach out during those hours. How can I assist you today?
-&#x3C;/example 2>
+</example 2>
 
-&#x3C;example 3>
+<example 3>
 H: Do you handle hybrid conferences?
 
 A: Absolutely! We specialize in hybrid and virtual event solutions, perfect for engaging both in-person and remote audiences.
 
 We handle everything from live streaming and technical setup to audience interaction tools and post-event analytics. Are you planning a hybrid event soon? I’d love to hear more about your requirements.
-&#x3C;/example 3>
+</example 3>
 
-&#x3C;example 4>
+<example 4>
 H: I’m looking to plan a wedding. Can you help with that?
 
 A: Congratulations! Yes, we’d love to help you plan your big day. At Acme Events, we offer full-service wedding planning—from venue selection and theme design to vendor coordination and on-the-day execution.
 
 Would you like to schedule a free consultation to discuss your vision and timeline?
-&#x3C;/example 4>
+</example 4>
 
-&#x3C;example 5>
+<example 5>
 H: Can I get a quote for a corporate event?
 
 A: Of course! To prepare an accurate quote, I’ll need a few details:
 
 1. What type of corporate event are you planning (e.g., seminar, gala, retreat)?
 
-<strong>2. Estimated number of attendees?
-</strong>
+2. Estimated number of attendees?
+
 3. Preferred date and location?
 
 4. Any specific services you need (e.g., catering, AV setup, branding)?
 
 Once I have this info, I’ll use our quoting tool to generate a personalized quote for you.
-&#x3C;/example 5>
-</code></pre>
-
-#### Step 5: Guardrails and Notes
-
-Lastly, to prevent the agent from going off track, it’s recommended to outline clear Do’s and Don’ts for how the agent should interact with the customer.
-
+</example 5>
 ```
+
+#### Шаг 5: Ограждения и примечания
+
+Наконец, чтобы агент не сбился с пути, рекомендуется четко обозначить, что можно и чего нельзя делать при взаимодействии агента с клиентом.
+
+```text
 Please adhere to the following guardrails:
 
 1. Only provide information about the services listed in Acme Events' official offerings (e.g., corporate events, weddings, public festivals, hybrid/virtual events).
@@ -152,58 +151,57 @@ Please adhere to the following guardrails:
 7. Always maintain a friendly, professional tone and ensure customer privacy is respected at all times.
 ```
 
-To help with prompting, you can use the "**Generate**" button, this will generate a system prompt following the best practices mentioned above:
+Для помощи с подсказками вы можете использовать кнопку « Сгенерировать », это сгенерирует системную подсказку в соответствии с рекомендациями, упомянутыми выше:
 
-<figure><img src="/assets/image (329).png" alt="" width="386"><figcaption></figcaption></figure>
+![](/assets/image%20\(329\).png){width="386"}![](/assets/image%20\(328\).png){width="563"}
 
-<figure><img src="/assets/image (328).png" alt="" width="563"><figcaption></figcaption></figure>
+#### Шаг 6: Наименование и описание инструментов и знаний
 
-#### Step 6: Tools and Knowledge naming and description
+Большинство готовых инструментов имеют понятные названия и описания, поэтому пользователям обычно не нужно их изменять. Однако для пользовательских инструментов и баз знаний предоставление понятного и описательного названия крайне важно, чтобы LLM понимал, когда и как использовать соответствующий инструмент. См. [рекомендации по определению функций](https://platform.openai.com/docs/guides/function-calling?api-mode=chat#best-practices-for-defining-functions). Вы также можете использовать кнопку « Сгенерировать » для описания знаний:
 
-Most prebuilt tools come with clear names and descriptions, so users typically don’t need to modify them. However, for custom tools and knowledge bases, providing a clear and descriptive name is essential to ensure the LLM knows when and how to use the appropriate tool. Refer to [best practices for defining functions](https://platform.openai.com/docs/guides/function-calling?api-mode=chat#best-practices-for-defining-functions). You can also use the "**Generate**" button to help with knowledge description:
+![](/assets/image%20\(330\).png){width="397"}
 
-<figure><img src="/assets/image (330).png" alt="" width="397"><figcaption></figcaption></figure>
+## Мульти-агенты
 
-## Multi Agents
+Для многоагентной архитектуры мы создадим систему, которая автоматически сортирует запросы клиентов и направляет их специализированным агентам в зависимости от характера запроса.
 
-For a multi-agent architecture, we will create a system that automatically triages customer inquiries and routes them to specialized agents based on the nature of the query.
+Хотя эта настройка предназначена для демонстрации возможностей архитектуры, стоит отметить, что пример, который мы рассмотрим, на самом деле может быть реализован одним агентом.
 
-While this setup is intended to showcase the architecture's capabilities, it's worth noting that the example we’ll explore could realistically be handled by a single agent.
+### Обзор
 
-### Overview
+1. Начальный узел : собирает запросы клиентов через структурированную форму.
+2. Агент состояния : анализирует запрос и определяет подходящий маршрут
+3. Агент по кадрам : обрабатывает запросы, связанные с кадрами, имея доступ к базе знаний по кадрам.
+4. Менеджер событий : управляет запросами, связанными с событиями, с помощью возможностей интеграции API.
+5. Генеральный агент : обрабатывает общие запросы и оказывает всестороннюю помощь.
 
-1. **Start Node**: Collects customer inquiry through a structured form
-2. **Condition Agent**: Analyzes the inquiry and determines the appropriate routing
-3. **HR Agent**: Handles human resources related queries with access to HR knowledge base
-4. **Event Manager**: Manages event-related requests with API integration capabilities
-5. **General Agent**: Handles general inquiries and provides broad assistance
+![](/assets/image%20\(317\).png)
 
-<figure><img src="/assets/image (317).png" alt=""><figcaption></figcaption></figure>
+#### Шаг 1: Создание начального узла
 
-#### Step 1: Create the Start Node
+![](/assets/image%20\(318\).png){width="161"}
 
-<figure><img src="/assets/image (318).png" alt="" width="161"><figcaption></figcaption></figure>
+1. Начните с добавления начального узла на ваш холст.
+2. Настройте начальный узел с помощью формы ввода для сбора запросов клиентов.
+3. Настройте форму со следующей конфигурацией:
 
-1. Begin by adding a **Start** node to your canvas
-2. Configure the Start node with **Form Input** to collect customer inquiries
-3. Set up the form with the following configuration:
-   * **Input Type**: Form Input
-   * **Form Title**: "Inquiry"
-   * **Form Description**: "Customer Inquiry"
-   * **Form Input Types**: Configure two string inputs:
-     * **Subject**: Variable name `subject`
-     * **Body**: Variable name `body`
+- Тип ввода : Форма ввода
+- Название формы : «Запрос»
+- Описание формы : «Запрос клиента»
+- Типы ввода формы : настройте два строковых ввода:
+  - Тема : Имя переменнойsubject
+  - Тело : Имя переменнойbody
 
-<figure><img src="/assets/image (319).png" alt="" width="410"><figcaption></figcaption></figure>
+![](/assets/image%20\(319\).png){width="410"}
 
-#### Step 2: Add the Condition Agent (Detect User Intention)
+#### Шаг 2: Добавьте агент условия (обнаружение намерения пользователя)
 
-<figure><img src="/assets/image (320).png" alt="" width="216"><figcaption></figcaption></figure>
+![](/assets/image%20\(320\).png){width="216"}
 
-1. Connect a **Condition Agent** node to the Start node
-2. Set up the system instructions to act as a customer support agent. You can also refer to the prompt used in [Single Agent](customer-support.md#single-agent). Here's a simple example:
+1. Подключите узел агента условия к узлу «Пуск»
+2. Настройте системные инструкции для работы в качестве агента поддержки клиентов. Вы также можете воспользоваться подсказками, используемыми в Single Agent . Вот простой пример:
 
-```
+```text
 You are a customer support agent. Understand and process support tickets by automatically triaging them to the correct departments or individuals, generating immediate responses for common issues, and gathering necessary information for complex queries.
 
 Follow the following routine with the user:
@@ -215,22 +213,22 @@ Follow the following routine with the user:
 Note: Transfers between agents are handled seamlessly in the background; do not mention or draw attention to these transfers in your conversation with the user
 ```
 
-4. Configure the **Input** to analyze the form subject: `{{ $form.subject }}`
-5. Set up **Scenarios** for routing:
-   * **Scenario 0**: "Query is related to HR"
-   * **Scenario 1**: "Query is related to events"
-   * **Scenario 2**: "Query is general query"
+3. Настройте входные данные для анализа темы формы: `{{ $form.subject }}`
+4. Настройте сценарии маршрутизации:
+   - Сценарий 0 : «Запрос связан с HR»
+   - Сценарий 1 : «Запрос связан с событиями»
+   - Сценарий 2 : «Запрос — общий запрос»
 
-<figure><img src="/assets/image (321).png" alt="" width="407"><figcaption></figcaption></figure>
+![](/assets/image%20\(321\).png){width="407"}
 
-#### Step 3: Create the HR Agent
+#### Шаг 3: Создайте HR-агента
 
-<figure><img src="/assets/image (322).png" alt="" width="217"><figcaption></figcaption></figure>
+![](/assets/image%20\(322\).png){width="217"}
 
-1. Add an **Agent** node and connect it to **Condition 0** output
-2. Set up the system message for HR specialization:
+1. Добавьте узел агента и подключите его к выходу Condition 0
+2. Настройте системное сообщение для специализации HR:
 
-```
+```text
 You are an HR agent responsible for retrieving and applying internal knowledge sources to answer employee queries about HR policies, procedures, and guidelines.
 
 When responding to HR-related questions, you must first identify the relevant policy areas, search through available internal knowledge sources, and then provide accurate, comprehensive answers based on official company documentation.
@@ -256,57 +254,58 @@ When responding to HR-related questions, you must first identify the relevant po
 - If insufficient information is available in internal sources, explicitly state this limitation and suggest alternative resources
 ```
 
-4. **Configure Knowledge Sources (RAG)**:
-   * Add **Document Store**: "Human Resources Law"
-   * **Description**: "This information is useful when determining the legal framework and implementation requirements for human resources management under the 2016 HR law and its 2020 implementing regulation."
-   * **Return Source Documents**: Enabled
+4. Настройка источников знаний (RAG):
+   - Добавить хранилище документов : «Закон о кадрах»
+   - Описание : «Эта информация полезна при определении правовой базы и требований к реализации управления человеческими ресурсами в соответствии с кадровым законодательством 2016 года и регламентом по его внедрению 2020 года».
+   - Возврат исходных документов : включено
 
-<figure><img src="/assets/image (323).png" alt="" width="400"><figcaption></figcaption></figure>
+![](/assets/image%20\(323\).png){width="400"}
 
-#### Step 4: Create the Event Manager
+#### Шаг 4: Создайте менеджера событий
 
-<figure><img src="/assets/image (324).png" alt="" width="218"><figcaption></figcaption></figure>
+![](/assets/image%20\(324\).png){width="218"}
 
-1. Add another **Agent** node and connect it to **Condition 1** output
-2. Set up the system message:
+1. Добавьте еще один узел агента и подключите его к выходу «Условие 1».
+2. Настройте системное сообщение:
 
-```
+```text
 Act as an event manager that can determine actions on events such as create, update, get, list and delete.
 ```
 
-4. **Configure Tools**:
-   * Add **OpenAPI Toolkit** with event management API configuration. Refer to [OpenAPI Toolkit](interacting-with-api.md#tool-openapi-toolkit) for more details.
+4. Инструменты настройки:
 
-<figure><img src="/assets/image (325).png" alt="" width="399"><figcaption></figcaption></figure>
+- Добавьте OpenAPI Toolkit с конфигурацией API управления событиями. Подробнее см. в разделе [OpenAPI Toolkit](interacting-with-api#tool-openapi-toolkit).
 
-The Event Manager has access to a complete event management API that can:
+![](/assets/image%20\(325\).png){width="399"}
 
-* List all events
-* Create new events
-* Retrieve event details by ID
-* Update event information
-* Delete events
+Менеджер событий имеет доступ к полному API управления событиями, который может:
 
-Refer to [Event Management Server](interacting-with-api.md#prerequisite) for the example code.
+- Список всех событий
+- Создать новые события
+- Получить сведения о событии по идентификатор
+- Обновить информацию о событии
+- Удалить события
 
-#### Step 5: Create the General Agent
+Пример кода смотрите в разделе [Event Management Server](interacting-with-api#prerequisite).
 
-<figure><img src="/assets/image (326).png" alt="" width="204"><figcaption></figcaption></figure>
+#### Шаг 5: Создайте генерального агента
 
-1. Add a third **Agent** node and connect it to **Condition 2** output. This will act as a fallback route that can answer any non-related query. Can also be replaced by [Direct Reply](../using-flowise/agentflowv2.md#id-12.-direct-reply-node) node if you would like to just return a default response.
-2. **Configuration**:
-   * No additional tools required for general inquiries
-   * No knowledge sources needed
+![](/assets/image%20\(326\).png){width="204"}
 
-### Testing the Flow
+1. Добавьте третий узел «Агент» и подключите его к выходу «Условие 2» . Он будет действовать как резервный маршрут, который может ответить на любой нерелевантный запрос. Его также можно заменить узлом [Direct Reply](../using-flowise/agentflowv2#id-12.-direct-reply-node), если вы хотите просто вернуть ответ по умолчанию.
+2. Конфигурация:
+   - Для общих запросов дополнительные инструменты не требуются.
+   - Источники знаний не требуются
 
-1. **Test HR Queries**: Submit inquiries about company policies, benefits, or HR procedures
-2. **Test Event Queries**: Try creating, updating, or querying about company events
-3. **Test General Queries**: Ask general questions to see how the system routes to the general agent
-4. **Observe Routing**: Notice how the condition agent seamlessly routes queries without exposing the transfer process
+### Тестирование потока
 
-<figure><img src="/assets/image (327).png" alt=""><figcaption></figcaption></figure>
+1. Тестовые запросы по кадрам : отправка запросов о политике компании, льготах или кадровых процедурах
+2. Тестовые запросы событий : попробуйте создать, обновить или запросить информацию о событиях компании.
+3. Тестирование общих запросов : задавайте общие вопросы, чтобы увидеть, как система направляет запросы к общему агенту.
+4. Наблюдайте за маршрутизацией : обратите внимание, как агент условий плавно направляет запросы, не раскрывая процесс передачи.
 
-### Complete Flow Structure
+![](/assets/image%20\(327\).png)
+
+### Полная структура потока
 
 {% file src="/assets/Customer Support Agents.json" %}

@@ -1,221 +1,217 @@
 # Human In The Loop
 
-In the previous tutorials, we explored how an Agent can dynamically use tools to answer queries or complete assigned tasks. **Human-in-the-loop** adds a layer of control by allowing the Agent to request human input, approval, or feedback before proceeding.
+В предыдущих уроках мы рассмотрели, как агент может динамично использовать инструменты для ответа на запросы или выполнения поставленных задач. Human-in-the-loop (человек в цикле) добавляет уровень контроля, позволяя агенту запрашивать у человека ввод, одобрение или обратную связь перед дальнейшими действиями.
 
-There are 2 ways human in the loop can be used:
+Существует 2 способа использования human-in-the-loop:
 
-- Using [Human Input](../using-flowise/agentflowv2#id-11.-human-input-node) node to halt the execution
-- Enable **Require Human Input** for Agent's tools
+- Использование узла [Human Input](../using-flowise/agentflowv2#id-11.-human-input-node) для приостановки выполнения
+- Включение опции **Require Human Input** для инструментов агента
 
-## Human Input Node
+## Узел Human Input
 
-The **Human Input** node allows execution to be paused and only resumed after a human has provided feedback to either approve or reject the action.
+Этот узел позволяет приостановить выполнение и продолжить его только после того, как человек предоставит обратную связь — одобрение или отказ.
+В этом уроке мы научимся создавать автоматизированного агента для ответа на электронную почту, который запрашивает отзыв пользователя перед отправкой письма.
 
-In this tutorial, we’ll learn how to create an automated email reply agent that asks for user feedback before sending out the email.
+### Обзор
 
-### Overview
+Цель этого сценария — создать интеллектуальную систему автоматического ответа на электронные письма, которая:
 
-The goal of this use case is to create an intelligent email reply system that:
+1. Получает входящие запросы по электронной почте
+2. Генерирует профессиональные ответы с помощью ИИ
+3. Запрашивает одобрение человека перед отправкой
+4. Позволяет вносить исправления и улучшения
+5. Автоматически отправляет одобренное письмо
 
-1. Receives incoming email inquiries
-2. Generates professional email responses using AI
-3. Requests human approval before sending
-4. Allows for revisions and improvements
-5. Automatically sends the approved email
+![](/assets/image%20\(23\).png)
 
-![](</assets/image (23).png>)
+#### Шаг 1: Настройка стартового узла
 
-#### Step 1: Setting up the Start Node
+1. Перетащите и разместите узел Start на холсте. Это точка входа для данных входящих писем.
+2. Настройте узел Start следующим образом:
 
-1. Drag and drop the **Start** node onto the canvas. This will be the entry point for incoming email data.
-2. Configure the Start node with the following settings:
-   - **Input Type**: Select "Form Input" to capture structured email data
-   - **Form Title**: "Email Inquiry"
-   - **Form Description**: "Incoming email inquiry"
-3. Add the following Form Input Types:
-   - **Subject** (String): To capture the email subject line
-   - **Body** (String): To capture the email content
-   - **From** (String): To capture the sender's email address
+- Тип ввода: "Form Input" (Форма ввода) — чтобы захватывать структурированные данные письма
+- Заголовок формы: "Входящая почта"
+- Описание формы: "Запрос по входящей почте"
 
-![](</assets/image (1) (1) (1) (1) (1) (1) (1).png>){width="398"}
+3. Добавьте поля формы:
 
-#### Step 2: Creating the Email Reply Agent
+- Subject (Строка): для заголовка письма
+- Body (Строка): для содержания письма
+- From (Строка): для адреса отправителя
 
-1. Add an **Agent** node and connect it to the Start node. This agent will analyze the incoming email and generate an appropriate response.
-2. Add system message, for example:
+![](/assets/image%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="398"}
+
+#### Шаг 2: Создание агента для ответа на письмо
+
+1. Добавьте узел Agent и соедините его с узлом Start. Этот агент будет анализировать входящее письмо и генерировать ответ.
+2. Добавьте системное сообщение, например:
    ```text
-   You are a customer support agent working in Flowise Inc. Write a professional email reply to user's query. Use the web search tools to get more details about the prospect.
+   Вы — сотрудник службы поддержки клиентов компании OSMI. Напишите профессиональный ответ на запрос пользователя. Используйте инструменты поиска в Интернете для получения дополнительных деталей о клиенте.
 
-   Always reply as Samantha, Customer Support Representative in Flowise. Don't use placeholders.
+   Всегда отвечайте как Samantha, представитель службы поддержки OSMI. Не используйте заглушки
    ```
-3. Add the following tools to enhance the agent's capabilities:
-   - **Google Custom Search**: To research customer information and provide relevant context
-   - **Current DateTime**: To include accurate timestamps in responses
+3. Добавьте следующие инструменты для расширения возможностей агента:
+   - **Google Custom Search**: для поиска информации о клиенте и предоставления релевантного контекста
+   - **Current DateTime**: чтобы включать актуальные временные метки в ответы
 
-![](</assets/image (2) (1) (1) (1) (1) (1) (1).png>){width="563"}
+![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Step 3: Adding Human Input for Approval
+#### Шаг 3: Добавление Human Input для одобрения
 
-1. Add a **Human Input** node and connect it to the Email Reply Agent. This creates the human-in-the-loop checkpoint.
-2. Configure the Human Input node:
-   - **Description Type**: "Fixed"
-   - **Description**: "Are you sure you want to proceed?"
-   - **Enable Feedback**: True (allows humans to provide additional feedback)
-3. This node will pause the workflow and present the AI-generated response to a human reviewer. The reviewer can either:
-   - **Proceed**: Approve the response and continue to email sending
-   - **Reject**: Send feedback and loop back to the agent for improvements
+1. Добавьте узел **Human Input** и соедините его с агентом для ответа. Это создаст контрольную точку human-in-the-loop.
+2. Настройте узел Human Input:- Тип описания: "Fixed"- Описание: "Вы уверены, что хотите продолжить?"- Включить обратную связь: True (чтобы человек мог оставить комментарий или исправления)
+3. Этот узел приостановит выполнение и покажет сгенерированный ИИ ответ человеку-ревьюеру, который сможет:
+   - Одобрить: продолжить и отправить письмо
+   - Отклонить: оставить обратную связь и отправить обратно агенту для доработки
 
-![](</assets/image (3) (1) (1) (1) (1) (1).png>){width="563"}
+![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Step 4: Setting up the Loop Back Mechanism
+#### Шаг 4: Настройка механизма возврата (Loop Back)
 
-1. Add a **Loop** node to handle rejection scenarios. This allows the workflow to return to the Email Reply Agent for improvements.
-2. Configure the Loop node:
-   - **Loop Back To**: Select "Email Reply Agent" from the dropdown
-   - **Max Loop Count**: 5 (prevents infinite loops)
-3. Connect the "reject" output from the Human Input node to this Loop node. When a human rejects the response, the workflow will return to the agent with the feedback for improvement.
+1. Добавьте узел Loop, который будет обрабатывать случаи отказа. Он позволяет возвратиться к агенту для улучшений.
+2. Настройте узел Loop:
+   - "Loop Back To": выберите "Email Reply Agent"
+   - "Max Loop Count": 5 (чтобы предотвратить бесконечные циклы)
+3. Соедините выход "reject" узла Human Input с узлом Loop. Тогда, при отказе, рабочий процесс возвращается к агенту с комментариями для коррекции.
 
-![](</assets/image (5) (1) (1) (1) (1).png>){width="563"}
+![](/assets/image%20\(5\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-#### Step 5: Creating the Email Subject & Body Generator
+#### Шаг 5: Создание генератора темы и тела письма
 
-1. Add an **LLM** node and connect it to the "proceed" output of the Human Input node. This node will structure the approved response into proper email format.
-2. Set up JSON Structured Output:
-   - **Key**: "subject", **Type**: "string", **Description**: "Subject of the email"
-   - **Key**: "body", **Type**: "string", **Description**: "Body of the email"
+1. Добавьте узел LLM и соедините его с выходом "продолжить" узла Human Input. Этот узел сформирует структуру письма — тему и текст.
+2. Настройте структурированный JSON-вывод:
 
-![](</assets/image (6) (1) (1) (1) (1).png>){width="563"}
+- "subject" (тип: string): тема письма
+- "body" (тип: string): содержание письма
 
-#### Step 6: Setting up Email Sending
+![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-1. Add a **Tool** node and connect it to the Email Subject & Body LLM node. This will handle the actual email sending.
-2. Configure the Tool node:
-   - **Tool**: Select "Gmail" from the available tools
-   - **Message Actions**: "sendMessage"
-3. Configure the tool input arguments:
-   - **to**: Use the variable `{{ $form.from }}` to reply to the original sender
-   - **subject**: Use `{{ llmAgentflow_0.output.subject }}` to get the generated subject from Step 5
-   - **body**: Use `{{ llmAgentflow_0.output.body }}` to get the generated email body from Step 5
+#### Шаг 6: Настройка отправки письма
 
-![](</assets/image (7) (1) (1) (1) (1).png>){width="563"}
+1. Добавьте узел Tool и соедините его с узлом LLM по теме и телу. Этот узел будет отвечать за фактическую отправку письма.
+2. Настройте узел Tool:
+   - Инструмент: выберите "Gmail"
+   - Действие сообщения: "sendMessage" (отправить сообщение)
+3. Укажите аргументы:
+   - **to**: `{{ $form.from }}`, чтобы ответить отправителю исходного письма
+   - **subject**: `{{ llmAgentflow_0.output.subject }}`, чтобы получить сгенерированную тему из Шага 5
+   - **body**: `{{ llmAgentflow_0.output.body }}`, чтобы получить сгенерированное содержание письма из Шага 5
 
-### How the Workflow Operates
+![](/assets/image%20\(7\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png){width="563"}
 
-When an email inquiry comes in, here's what happens:
+### Как работает рабочий процесс
 
-1. **Form Input**: The system captures the email subject, body, and sender information
-2. **AI Analysis**: The Email Reply Agent analyzes the inquiry and generates a professional response using web search for additional context
-3. **Human Review**: The workflow pauses and presents the AI-generated response to a human reviewer
-4. **Decision Point**: The human can either:
-   - **Approve**: The response proceeds to email formatting and sending
-   - **Reject**: The response returns to the agent with feedback for improvement
-5. **Email Formatting**: If approved, the response is structured into proper email format with subject and body
-6. **Email Sending**: The final email is automatically sent via Gmail to the original sender
+Когда поступает электронное сообщение с запросом, происходит следующее:
 
-### Testing the Workflow
+1. Ввод формы: система захватывает тему письма, его содержание и информацию об отправителе
+2. Анализ ИИ: агент по ответу на электронную почту анализирует запрос и генерирует профессиональный ответ с использованием поиска в интернете для дополнительного контекста
+3. Рассмотрение человеком: рабочий процесс приостанавливается, и сгенерированный ИИ ответ показывается человеку-одобрителю
+4. Точка решения: человек может либо:
 
-1. Start the workflow by filling out the form with a sample email inquiry
+- Одобрить: ответ переходит к форматированию и отправке по электронной почте
+- Отклонить: ответ возвращается агенту с обратной связью для улучшения
 
-![](</assets/image (8) (1) (1) (1).png>){width="527"}
+5. Форматирование письма: если одобрено, ответ структурируется в правильный формат email с темой и содержанием
+6. Отправка email: окончательное письмо автоматически отправляется через Gmail на исходный адрес отправителя
 
-2. Review the Agent response in the Human Input step
+### Тестирование рабочего процесса
 
-![](</assets/image (9) (1) (1).png>){width="563"}
+1. Запустите рабочий процесс, заполнив форму с примером электронного запроса
 
-3. Reject the response and provide more feedback:
+![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\).png){width="527"}
 
-![](</assets/image (10) (1) (1).png>){width="563"}
+2. Просмотрите ответ агента на этапе ручного ввода
 
-4. Review the revised response from Agent:
+![](/assets/image%20\(9\)%20\(1\)%20\(1\).png){width="563"}
 
-![](</assets/image (11) (1) (1).png>){width="563"}
+3. Отклоните ответ и предоставьте дополнительную обратную связь:
 
-5. Proceed and verify that email is being sent correctly:
+![](/assets/image%20\(10\)%20\(1\)%20\(1\).png){width="563"}
 
-![](</assets/image (12) (1) (1).png>){width="563"}
+4. Просмотрите исправленный ответ от агента:
 
-### Complete Flow Structure
+![](/assets/image%20\(11\)%20\(1\)%20\(1\).png){width="563"}
+
+5. Продолжите и убедитесь, что письмо отправляется правильно:
+
+![](/assets/image%20\(12\)%20\(1\)%20\(1\).png){width="563"}
+
+### Полная структура потока
 
 {% file src="/assets/Human In The Loop Agent.json" %}
 
-## Require Human Input on Agent Tools
+## Требуется ручной ввод при использовании инструментов агента
 
-When an Agent decides to use tools, the following happens under the hood:
+Когда агент решает использовать инструменты, происходит следующее:
 
-1. Given a user query, the LLM determines whether tool calls are needed.
-2. If tool calls are identified from LLM output response, Flowise locates the matching tools and executes the corresponding functions.
-3. The results from the tool executions are returned to the LLM.
-4. The LLM then decides whether additional tool calls are required or if it has enough information to return the final response.
+1. Исходя из запроса пользователя, LLM определяет, необходимо ли вызывать инструменты.
+2. Если в ответе LLM обнаружены вызовы инструментов, Flowise находит соответствующие инструменты и выполняет соответствующие функции.
+3. Результаты выполнения инструментов возвращаются в LLM.
+4. Затем LLM решает, нужны ли дополнительные вызовы инструментов или у него есть достаточная информация для возврата окончательного ответа.
 
 ![](/assets/Untitled-2025-06-15-0132.png){width="375"}
 
-When Require Human Input is enabled, we place an additional checkpoint after tool calls are detected:
+Когда включена опция Require Human Input, мы добавляем дополнительную точку контроля после обнаружения вызовов инструментов:
 
-![](</assets/Untitled-2025-06-15-0132 (1).png>){width="563"}
+![](/assets/Untitled-2025-06-15-0132%20\(1\).png){width="563"}
 
-This is crucial for sensitive tool calls such as placing orders, bookings, meetings, sending emails, etc, where you need human confirmation and review.
+Это важно для чувствительных вызовов инструментов, таких как размещение заказов, бронирование, встречи, отправка писем и т. д., когда требуется подтверждение и ручной просмотр человеком.
 
-We can use the sample email reply system above, but simplify it to have just a single Agent.
+Мы можем использовать приведённую выше систему автоматического ответа электронной почты, но упростить её, оставив только один агент.
 
-![](</assets/image (313).png>){width="563"}
+![](/assets/image%20\(313\).png){width="563"}
 
-### Configuration
+### Конфигурация
 
-1. Add an **Agent** node and connect it to the Start node. This single agent will handle both email analysis and human approval.
-2. Add a system message to Agent, for example:
+1. Добавьте узел Agent и подсоедините его к узлу Start. Этот один агент будет обрабатывать как анализ электронной почты, так и одобрение человеком.
+2. Добавьте системное сообщение для агента, например:
    ```text
-   You are a customer support agent working in Flowise Inc. Create a draft professional email reply to user's query. Use the web search tools to get more details about the prospect.
-
-   Always reply as Samantha, Customer Support Representative in Flowise. Don't use placeholders.
-
-   Today's date is {{ current_date_time }}.
+   Вы — сотрудник службы поддержки клиентов, работающий в OSMI. Создайте черновик профессионального ответа на запрос пользователя. Используйте инструменты поиска в сети, чтобы получить больше деталей о клиенте.Всегда отвечайте как Samantha, представитель службы поддержки клиентов OSMI. Не используйте заполнители. Сегодняшняя дата: {{ current_date_time }}.
    ```
-3. Add the following tools:
-   - **Google Custom Search**: For researching customer information
-   - **Gmail**: For creating email drafts with human approval
-4. Configure the Gmail tool:
-   - **Gmail Type**: "drafts"
-   - **Draft Actions**: "createDraft"
-   - **Require Human Input**: ✅ **Enable this option** - This is the key feature that creates the HITL functionality
+3. Добавьте следующие инструменты:
+   - **Google Custom Search**: для исследования информации о клиенте
+   - **Gmail**: для создания черновиков писем с возможностью ручного одобрения
+4. Настройте инструмент Gmail:
+   - **Gmail Тип**: "drafts"
+   - **Действия для черновика**: "createDraft"
+   - **Требовать ручной ввод**: ✅ **Включите этот параметр** - это ключевая функция, которая реализует работу с участием человека (HITL)
 
-![](</assets/image (314).png>){width="481"}
+![](/assets/image%20\(314\).png){width="481"}
 
-### How the Simplified Flow Works
+### Как работает упрощённый рабочий процесс
 
-1. **Form Input**: User submits email inquiry details
-2. **AI Analysis**: The agent analyzes the email and uses Google Search for additional context
-3. **Draft Creation**: When the agent attempts to create a Gmail draft, the workflow pauses
-4. **Human Review**: The system presents the draft email for human approval
-5. **Decision**: Human can approve (create draft) or reject (provide feedback and retry)
+1. **Form Input**: (Ввод формы): пользователь отправляет детали запроса по электронной почте
+2. **AI Analysis** (Анализ ИИ): агент анализирует письмо и использует Google Search для получения дополнительного контекста
+3. **Draft Creation** (Создание черновика): при попытке агента создать черновик в Gmail рабочий процесс приостанавливается
+4. **Human Review** (Рассмотрение человеком): система показывает черновик письма для одобрения человеком
+5. **Decision** (Решение): человек может одобрить (создать черновик) или отклонить (дать обратную связь и повторить попытку)
 
-### Testing the Agent
+### Тестирование агента
 
-1. Start the workflow by filling out the form with a sample email inquiry
+1. Запустите рабочий процесс, заполнив форму с примером электронного запроса :br![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\).png){width="527"}
+2. Перед созданием черновика в Gmail агент спросит у пользователя одобрение или отказ.
 
-   ![](</assets/image (8) (1) (1) (1).png>){width="527"}
-2. Before the Agent creates the Gmail draft, it will ask the user for approval or rejection.
+![](/assets/image%20\(315\).png){width="563"}
 
-![](</assets/image (315).png>){width="563"}
+3. Если инструмент одобрен, агент продолжит выполнение и создаст черновик в Gmail. Агент достаточно умён, чтобы определить подходящую тему, содержание и получателя для письма.
 
-3. If the tool is approved, the Agent will proceed to call the tool and create the draft in Gmail. The Agent is smart enough to determine the appropriate subject, body, and recipient for the email.
+![](/assets/image%20\(316\).png){width="563"}
 
-![](</assets/image (316).png>){width="563"}
-
-### Complete Flow Structure
+### Полная структура потока
 
 {% file src="/assets/Email Agent.json" %}
 
-## Sharing Execution Traces for External Review and Approval
+## Совместное использование трассировок выполнения для внешнего обзора и одобрения
 
-1. From the dashboard left side bar, click **Executions.**
-2. Find the Execution trace, and click **Share.**
+1. В панели слева на панели управления нажмите **Executions** (Выполнения).
+2. Найдите трассировку выполнения и нажмите **Share** (Поделиться).
 
-![](</assets/image (13) (1) (1).png>)
+![](/assets/image%20\(13\)%20\(1\)%20\(1\).png)
 
-3. The execution trace is now available as a public link. You can share this link with others for review.
+3. Трассировка выполнения теперь доступна как публичная ссылка. Вы можете поделиться этой ссылкой с другими для обзора.
 
-![](</assets/image (14) (1) (1).png>){width="541"}
+![](/assets/image%20\(14\)%20\(1\)%20\(1\).png){width="541"}
 
-4. Users outside of Flowise can reject or approve:
+4. Пользователи за пределами OSMI могут отклонить или одобрить:
 
-![](</assets/image (15) (1) (1).png>)
+![](/assets/image%20\(15\)%20\(1\)%20\(1\).png)

@@ -1,43 +1,43 @@
-# Supervisor and Workers
+# Руководитель и рабочие (Supervisor and Workers)
 
-The Supervisor Worker pattern is a powerful workflow design where a supervisor agent coordinates multiple specialized worker agents to complete complex tasks. This pattern allows for better task delegation, specialized expertise, and iterative refinement of solutions.
+Шаблон «Супервизор-работник» — это мощная модель рабочего процесса, в которой агент-супервайзер координирует работу нескольких специализированных агентов-исполнителей для выполнения сложных задач. Этот шаблон обеспечивает более эффективное делегирование задач, специализированную экспертизу и итеративное совершенствование решений.
 
-## Overview
+## Обзор
 
-In this tutorial, we'll build a collaborative system with:
+В этом уроке мы создадим совместную систему с:
 
-* **Supervisor**: An LLM that analyzes tasks and decides which worker should act next
-* **Software Engineer**: Specialized in designing and implementing software solutions
-* **Code Reviewer**: Focused on reviewing code quality and providing feedback
-* **Final Answer Generator**: Compiles the collaborative work into a comprehensive solution
+- Руководитель : магистр права, который анализирует задачи и решает, какой работник должен действовать следующим.
+- Инженер-программист : специализируется на проектировании и внедрении программных решений.
+- Рецензент кода : сосредоточен на проверке качества кода и предоставлении отзывов.
+- Генератор окончательного ответа : объединяет совместную работу в комплексное решение.
 
-<figure><img src="/assets/image (19).png" alt=""><figcaption></figcaption></figure>
+![](</assets/image (19).png>)
 
-### Step 1: Create the Start Node
+### Шаг 1: Создание начального узла
 
-<figure><img src="/assets/image (7) (1).png" alt="" width="160"><figcaption></figcaption></figure>
+![](</assets/image (7) (1).png>){width="160"}
 
-The flow begins with a **Start** node that captures user input and initializes the workflow state.
+Поток начинается с начального узла, который фиксирует ввод пользователя и инициализирует состояние рабочего процесса.
 
-1. Add a **Start** node to your canvas
-2. Configure the **Input Type** as "Chat Input"
-3. Set up **Flow State** with these initial variables:
-   * `next`: To keep track of the next agent
-   * `instruction`: Instruction for the next agent on what to do
+1. Добавьте начальный узел на свой холст
+2. Настройте тип ввода как «Ввод чата».
+3. Настройте Flow State с помощью следующих начальных переменных:
+  - next: Чтобы отслеживать следующего агента
+  - instruction: Инструкция для следующего агента о том, что делать
 
-<figure><img src="/assets/image (6) (1).png" alt="" width="417"><figcaption></figcaption></figure>
+![](</assets/image (6) (1).png>){width="417"}
 
-### Step 2: Add the Supervisor LLM
+### Шаг 2: Добавьте научного руководителя LLM
 
-<figure><img src="/assets/image (8) (1).png" alt="" width="227"><figcaption></figcaption></figure>
+![](</assets/image (8) (1).png>){width="227"}
 
-The **Supervisor** is the orchestrator that decides which worker should handle each part of the task.
+Руководитель — это координатор, который решает, какой работник должен выполнять каждую часть задачи.
 
-1. Connect a **LLM** node after the Start node
-2. Label it "Supervisor"
-3. Configure the system message, for example:
+1. Подключите узел LLM после начального узла
+2. Назовите его «Руководитель».
+3. Настройте системное сообщение, например:
 
-```
+```text
 You are a supervisor tasked with managing a conversation between the following workers:
 - Software Engineer  
 - Code Reviewer
@@ -48,43 +48,50 @@ When finished, respond with FINISH.
 Select strategically to minimize the number of steps taken.
 ```
 
-4. Set up **JSON Structured Output** with these fields:
-   * `next`: Enum with values "FINISH, SOFTWARE, REVIEWER"
-   * `instructions`: The specific instructions of the sub-task the next worker should accomplish
-   * `reasoning`: The reason why next worker is tasked to do the job
-5. Configure **Update Flow State** to store:
-   * `next`: `{{ output.next }}`
-   * `instruction`: `{{ output.instructions }}`
-6. Set the **Input Message** to: _"Given the conversation above, who should act next? Or should we FINISH? Select one of: SOFTWARE, REVIEWER."_ The Input Message will be inserted at the end, as if the user is asking the supervisor to assign the next agent.
+4. Настройте структурированный вывод JSON с помощью следующих полей:
+- next: Перечисление со значениями «ФИНИШ, ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ, РЕЦЕНЗЕНТ»
+- instructions: Конкретные инструкции подзадачи, которую должен выполнить следующий работник
+- reasoning: Причина, по которой следующему работнику поручено выполнить эту работу
 
-<figure><img src="/assets/Untitled-2025-06-19-1011.png" alt="" width="563"><figcaption></figcaption></figure>
+5. Настройте состояние потока обновления для хранения:
+- next:{{ output.next }}
+- instruction:{{ output.instructions }}
 
-### Step 3: Create the Routing Condition
+6. Введите входящее сообщение : «Учитывая вышеизложенный разговор, кто должен действовать следующим? Или нам следует ЗАВЕРШИТЬ? Выберите один из вариантов: ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ, РЕЦЕНЗЕНТ». Входящее сообщение будет вставлено в конце, как будто пользователь просит руководителя назначить следующего оператора.
 
-<figure><img src="/assets/image (10).png" alt="" width="323"><figcaption></figcaption></figure>
+![](/assets/Untitled-2025-06-19-1011.png){width="563"}
 
-The **Check next worker** condition node routes the flow based on the supervisor's decision.
+### Шаг 3: Создайте условие маршрутизации
 
-1. Add a **Condition** node after the Supervisor
-2. Set up two conditions:
-   * **Condition 0**: `{{ $flow.state.next }}` equals "SOFTWARE"
-   * **Condition 1**: `{{ $flow.state.next }}` equals "REVIEWER"
-3. The "Else" branch (Condition 2) will handle the "FINISH" case
+![](</assets/image (10).png>){width="323"}
 
-This creates three output paths: one for each worker and one for completion.
+Узел « Проверить следующее рабочее состояние» направляет поток на основе решения супервизора.
 
-<figure><img src="/assets/image (11).png" alt="" width="395"><figcaption></figcaption></figure>
+1. Добавьте узел «Условие» после «Супервизора»
 
-### Step 4: Configure the Software Engineer Agent
+2. Установите два условия:
 
-<figure><img src="/assets/image (12).png" alt="" width="296"><figcaption></figcaption></figure>
+- Условие 0 : {{ $flow.state.next }}эквивалентно «ПРОГРАММНОМУ ОБЕСПЕЧЕНИЮ»
 
-The **Software Engineer** specializes in designing and implementing software solutions.
+- Условие 1 : {{ $flow.state.next }}эквивалентно «РЕЦЕНЗЕНТ»
 
-1. Connect an **Agent** node to Condition 0 output
-2. Configure the system message:
+3. Ветвь «Else» (Условие 2) обрабатывает случай «FINISH».
 
-```
+Это создает три выходных пути: по одному для каждого работника и один для завершения.11
+
+![](</assets/image (11).png>){width="395"}
+
+### Шаг 4: Настройте агента-разработчика программного обеспечения
+
+![](</assets/image (12).png>){width="296"}
+
+Инженер -программист специализируется на проектировании и внедрении программных решений.
+
+1. Подключите узел агента к выходу Condition 0
+
+2. Настройте системное сообщение:
+
+```text
 As a Senior Software Engineer, you are a pivotal part of our innovative development team. Your expertise and leadership drive the creation of robust, scalable software solutions that meet the needs of our diverse clientele.
 
 Your goal is to lead the development of high-quality software solutions.
@@ -94,22 +101,23 @@ Design and implement new features for the given task, ensuring it integrates sea
 The output should be a fully functional, well-documented feature that enhances our product's capabilities. Include detailed comments in the code.
 ```
 
-4. Set **Input Message** to: `{{ $flow.state.instruction }}` . The Input Message will be inserted at the end, as if the user is giving an instruction to the Software Engineer Agent.
+4. Установите значение «Входное сообщение» : `{{ $flow.state.instruction }}`. Входное сообщение будет вставлено в конец, как будто пользователь даёт инструкцию агенту-программисту.
 
-<figure><img src="/assets/image (13).png" alt="" width="397"><figcaption></figcaption></figure>
+![](</assets/image (13).png>){width="397"}
 
-<figure><img src="/assets/image (14).png" alt="" width="563"><figcaption></figcaption></figure>
+![](</assets/image (14).png>){width="563"}
 
-### Step 5: Configure the Code Reviewer Agent
+### Шаг 5: Настройте агента проверки кода
 
-<figure><img src="/assets/image (16).png" alt="" width="267"><figcaption></figcaption></figure>
+![](</assets/image (16).png>){width="267"}
 
-The **Code Reviewer** focuses on quality assurance and code review.
+Code Reviewer фокусируется на обеспечении качества и проверке кода.
 
-1. Connect an **Agent** node to Condition 1 output
-2. Configure the system message:
+1. Подключите узел агента к выходу Условие 1
 
-```
+2. Настройте системное сообщение:
+
+```text
 As a Quality Assurance Engineer, you are an integral part of our development team, ensuring that our software products are of the highest quality. Your meticulous attention to detail and expertise in testing methodologies are crucial in identifying defects and ensuring that our code meets the highest standards.
 
 Your goal is to ensure the delivery of high-quality software through thorough code review and testing.
@@ -117,36 +125,33 @@ Your goal is to ensure the delivery of high-quality software through thorough co
 Review the codebase for the new feature designed and implemented by the Senior Software Engineer. Provide constructive feedback, guiding contributors towards best practices and fostering a culture of continuous improvement. Your approach ensures the delivery of high-quality software that is robust, scalable, and aligned with strategic goals.
 ```
 
-4. Set **Input Message** to: `{{ $flow.state.instruction }}` . The Input Message will be inserted at the end, as if the user is giving an instruction to the Code Reviewer Agent.
+3. Установите значение «Входное сообщение» : `{{ $flow.state.instruction }}`. Входное сообщение будет вставлено в конец, как будто пользователь даёт инструкцию агенту проверки кода.
 
-<figure><img src="/assets/image (15).png" alt="" width="563"><figcaption></figcaption></figure>
+![](</assets/image (15).png>){width="563"}
 
-### Step 6: Add Loop Back Connections
+### Шаг 6: Добавьте петлевые соединения
 
-<figure><img src="/assets/image (17).png" alt="" width="563"><figcaption></figcaption></figure>
+![](</assets/image (17).png>){width="563"}
+Оба рабочих агента должны связаться с руководителем для дальнейшей координации.
+1. Добавьте узел цикла после инженера-программиста.
+- Установить параметр «Возврат к циклу » как «Супервизор»
+- Установите максимальное количество циклов на 5
+2. Добавьте еще один узел цикла после Code Reviewer.
+- Установить параметр «Возврат к циклу » как «Супервизор»
+- Установите максимальное количество циклов на 5
 
-Both worker agents need to loop back to the Supervisor for continued coordination.
+Эти циклы обеспечивают итеративное взаимодействие между агентами.1Ю 
 
-1. Add a **Loop** node after the Software Engineer
-   * Set **Loop Back To** as "Supervisor"
-   * Set **Max Loop Count** to 5
-2. Add another **Loop** node after the Code Reviewer
-   * Set **Loop Back To** as "Supervisor"
-   * Set **Max Loop Count** to 5
+### Шаг 7: Создайте генератор окончательных ответов
 
-These loops enable iterative collaboration between the agents.
+![](</assets/image (18).png>){width="436"}
 
-### Step 7: Create the Final Answer Generator
+Финальный агент объединяет всю совместную работу в комплексное решение.
+1. Подключите узел агента к выходу условия 2 (ветвь «Else»)
+2. Рекомендуется использовать LLM с большим размером контекста, например Gemini, из-за двустороннего характера общения, требующего большого количества токенов.
+3. Установите входное сообщение. Это важно, поскольку  входное сообщение будет вставлено в конце, как будто пользователь даёт указание генератору окончательных ответов просмотреть все диалоги и сгенерировать окончательный ответ.
 
-<figure><img src="/assets/image (18).png" alt="" width="436"><figcaption></figcaption></figure>
-
-The final agent compiles all the collaborative work into a comprehensive solution.
-
-1. Connect an **Agent** node to Condition 2 output (the "Else" branch)
-2. It is recommended to use a higher context size LLM like Gemini, due to the back-and-forth nature of the conversation, which consumes a large number of tokens.
-3. Set **Input Message.** This is important because Input Message will be inserted at the end, as if the user is giving an instruction to the Final Answer Generator to look at all the conversations, and generate a final response.
-
-```
+```text
 Given the above conversations, generate a detail solution developed by the software engineer and code reviewer.
 
 Your guiding principles:
@@ -157,49 +162,64 @@ Your guiding principles:
    Your final output must be in Markdown format.
 ```
 
-## How It Works
+### Как это работает
 
-The Supervisor Worker pattern enables several key benefits:
+Шаблон «Супервизор-работник» обеспечивает несколько ключевых преимуществ:
 
-**Intelligent Task Delegation**: The supervisor uses context and reasoning to assign the most appropriate worker for each sub-task.
+Интеллектуальное делегирование задач : руководитель использует контекст и логику, чтобы назначить наиболее подходящего работника для каждой подзадачи.
 
-**Iterative Refinement**: Workers can build upon each other's output, with the software engineer implementing features and the code reviewer providing feedback for improvements.
+Итеративное уточнение : сотрудники могут дополнять результаты работы друг друга: инженер-программист реализует функции, а рецензент кода предоставляет обратную связь для улучшений.
 
-**Stateful Coordination**: The flow maintains state across iterations, allowing the supervisor to make informed decisions about what should happen next.
+Координация с сохранением состояния : поток сохраняет состояние на протяжении всех итераций, что позволяет супервизору принимать обоснованные решения о том, что должно происходить дальше.
 
-**Specialized Expertise**: Each agent has a focused role and specialized prompt, leading to higher quality outputs in their domain.
+Специализированная экспертиза : каждый агент имеет конкретную роль и специализированные подсказки, что приводит к более качественным результатам в своей области.
 
-## Example Interaction
 
-Here's how a typical interaction might flow:
+## Пример взаимодействия
+Вот как может протекать типичное взаимодействие:
 
-1. **User**: "Create a React component for user authentication with form validation"
-2. **Supervisor**: Decides SOFTWARE should act first to implement the component
-3. **Software Engineer**: Creates a React authentication component with validation logic
-4. **Supervisor**: Decides REVIEWER should examine the implementation
-5. **Code Reviewer**: Reviews the code and suggests improvements for security and UX
-6. **Supervisor**: Decides SOFTWARE should implement the suggested improvements
-7. **Software Engineer**: Updates the component based on feedback
-8. **Supervisor**: Determines the task is complete and routes to FINISH
-9. **Final Answer Generator**: Compiles the complete solution with implementation and review feedback
+1. Пользователь : «Создать компонент React для аутентификации пользователя с проверкой формы»
 
-<figure><img src="/assets/image (20).png" alt=""><figcaption></figcaption></figure>
+2. Руководитель : решает, что ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ должно действовать первым и внедрять компонент
 
-## Complete Flow Structure
+3. Инженер-программист : создает компонент аутентификации React с логикой проверки.
+
+4. Руководитель : решает, что РЕЦЕНЗЕНТ должен проверить реализацию
+
+5. Рецензент кода : проверяет код и предлагает улучшения для безопасности и пользовательского опыта.
+
+6. Руководитель : решает, что ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ должно реализовать предложенные улучшения.
+
+7. Инженер-программист : обновляет компонент на основе отзывов.
+
+8. Руководитель : определяет, что задача выполнена, и направляет ее на этап ФИНИШ
+
+9. Генератор окончательного ответа : составляет полное решение с отзывами о реализации и обзорах.
+
+![](</assets/image (20).png>)
+
+## Полная структура потока
 
 {% file src="/assets/Supervisor Worker Agents.json" %}
 
-## Best Practices
+## Лучшие практики
 
-* This architecture consumes a lot of tokens due to the back and forth communications between agents, hence it is not suitable for every cases. It is particularly effective for:
-  * Software development tasks requiring both implementation and review
-  * Complex problem-solving that benefits from multiple perspectives
-  * Workflows where quality and iteration are important
-  * Tasks that require coordination between different types of expertise
-* Ensure each agent has a well-defined, specific role. Avoid overlapping responsibilities that could lead to confusion or redundant work.
-* Establish standard formats for how agents communicate their progress, findings, and recommendations. This helps the supervisor make better routing decisions.
-* Use memory settings appropriately to maintain conversation context while avoiding token limit issues. Consider using memory optimization settings like "Conversation Summary Buffer" for longer workflows.
+- Эта архитектура потребляет много токенов из-за обмена данными между агентами, поэтому подходит не для всех случаев. Она особенно эффективна для:
 
-## Video Tutorial
+  - Задачи разработки программного обеспечения, требующие как реализации, так и проверки
 
-{% embed url="https://youtu.be/TbZaj5SZcbM?si=E4nxn__HHzJbNwdf" %}
+  - Комплексное решение проблем, которое выигрывает от использования различных точек зрения
+
+  -   Рабочие процессы, где важны качество и итерация
+
+  - Задачи, требующие координации между различными видами экспертизы
+
+- Убедитесь, что у каждого агента есть чётко определённая, конкретная роль. Избегайте дублирования обязанностей, которое может привести к путанице или избыточной работе.
+
+- Установите стандартные форматы для передачи агентами информации о ходе работы, результатах и ​​рекомендациях. Это поможет руководителю принимать более обоснованные решения о маршрутизации.
+
+- Используйте настройки памяти надлежащим образом, чтобы поддерживать контекст разговора и избегать проблем с ограничением токенов. Для более длительных рабочих процессов рассмотрите возможность использования настроек оптимизации памяти, таких как «Буфер сводки разговора».
+
+## Видеоурок
+
+{% embed url="<https://youtu.be/TbZaj5SZcbM?si=E4nxn__HHzJbNwdf>" %}

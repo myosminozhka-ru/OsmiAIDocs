@@ -8,50 +8,21 @@ description: Обновление встроенных данных и выпо�
 
 ## Предварительные условия
 
-1. Зарегистрируйтесь на [Pinecone](https://app.pinecone.io/)
-2. Нажмите **Create index**
-
-![](/assets/pinecone_1.png)
-
+1. Зарегистрируйтесь на Pinecone
+2. Нажмите **Создать индекс**
 3. Заполните необходимые поля:
-   - **Index Name**, название создаваемого индекса (например, "flowise-test").
-   - **Dimensions**, размер векторов, которые будут вставлены в индекс (например, 1536).
-
-![](/assets/pinecone_2.png){width="527"}
-
-4. Нажмите **Create Index**
+   - **Название индекс**, название создаваемого индекса (например, "osmi-ai-test").
+   - **Размеры**, размер векторов, которые будут вставлены в индекс (например, 1536).
+4. Нажмите **Создать индекс**
 
 ## Настройка
 
-1. Получите или создайте ваш **API Key**
-
-![](/assets/pinecone_3.png)
-
+1. Получите или создайте ваш **API агент**
 2. Добавьте новый узел **Pinecone** на холст и заполните параметры:
    - Pinecone Index - название индекса
    - Pinecone namespace (необязательно)
-
-![](/assets/pinecone_4.png){width="279"}
-
-3. Создайте новые учетные данные Pinecone → Введите **API Key**.
-
-![](/assets/pinecone_5.png){width="563"}
-
+3. Создайте новые учетные данные Pinecone → Введите **API агент**.
 4. Добавьте дополнительные узлы на холст и начните процесс обновления данных (upsert).
-   - Документы можно подключить к любому узлу категории [**Document Loader**](../document-loaders/).
-   - Векторные представления (Embeddings) можно подключить к любому узлу категории [**Embeddings** ](../embeddings/).
-
-![](/assets/pinecone_6.png)![](/assets/pinecone_7.png)
-
-5. Проверьте через [дашборд Pinecone](https://app.pinecone.io), чтобы убедиться, что данные успешно обновлены (upserted).
-
-![](/assets/pinecone_8.png)
-
-6. Ресурсы
-
-- Интеграция Pinecone с LangChain
-  - [Python](https://docs.langchain.com/oss/python/langchain/overview)
-  - [NodeJS](https://docs.langchain.com/oss/javascript/langchain/retrieval)
-- Интеграция [Pinecone с LangChain](https://docs.pinecone.io/integrations/langchain)
-- Интеграция [Pinecone с OSMI](https://docs.pinecone.io/integrations/flowise)
-- Официальные [клиенты Pinecone](https://docs.pinecone.io/reference/pinecone-clients)
+   - Документы можно подключить к любому узлу категории [**Загрузчик документов**](../document-loaders/).
+   - Векторные представления (Векторизация) можно подключить к любому узлу категории [**Векторизация** ](../%D0%92%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F/).
+5. Проверьте через дашборд Pinecone, чтобы убедиться, что данные успешно обновлены (upserted).

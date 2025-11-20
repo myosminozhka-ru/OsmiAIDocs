@@ -2,7 +2,7 @@
 
 ## Предварительные условия
 
-1. Запустите сервер [Redis-Stack](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/) с помощью Docker.
+1. Запустите сервер Redis-Stack с помощью Docker.
 
 ```bash
 docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
@@ -11,24 +11,15 @@ docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:la
 ## Настройка
 
 1. Добавьте новый узел **Redis** на холст.
-2. Создайте новые учетные данные для Redis.
 
-![](/assets/image%20\(1\)%20\(1\)%20\(3\)%20\(1\)%20\(1\).png){width="257"}
+2. Создайте новые учетные данные для Redis.
 
 3. Выберите тип учетных данных Redis:
    Redis API, если у вас есть имя пользователя и пароль.
    Либо Redis URL, если у вас только URL-адрес.
 
-![](/assets/image%20\(2\)%20\(1\)%20\(1\)%20\(2\).png){width="563"}
-
 4. Введите ваш Redis URL-адрес.
-
-![](/assets/image%20\(3\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png){width="542"}
 
 5. Теперь вы можете приступать к вставке данных (upsert) с использованием Redis.
 
-![](/assets/image%20\(8\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(1\).png)![](/assets/image%20\(9\)%20\(2\)%20\(1\).png)
-
 6. Перейдите на портал Redis Insight и выберите вашу базу данных. Вы увидите все добавленные (upserted) данные на панели, что подтверждает успешную настройку:
-
-![](/assets/image%20\(138\).png)

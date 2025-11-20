@@ -1,29 +1,27 @@
 # Chroma
 
-## PrereqПредварительные условияuisite
+## Предварительные условия
 
 Вам потребуется сервер Chroma. Вы можете:
 
 1. Установить CLI Chroma и запустить сервер командой `chroma run`
-2. Зарегистрироваться в [Chroma Cloud](https://trychroma.com/home).
-3. Развернуть собственный экземпляр Chroma в [Docker](https://docs.trychroma.com/guides/deploy/docker).
+2. Зарегистрироваться в Chroma Cloud.
+3. Развернуть собственный экземпляр Chroma в Docker.
 
 ## Настройка
 
-| Входные данные  | Описание                                                                                                                                                | Значение по умолчанию   | Облако                           |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------- |
-| Document        | Можно подключать к узлам и [Document Loader](../document-loaders/)                                                                                      |                         |                                  |
-| Embeddings      | Можно подключать к узлам из [Embeddings](../embeddings/)                                                                                                |                         |                                  |
-| Collection Name | Название коллекции Chroma. Обратитесь [сюда](https://docs.trychroma.com/usage-guide#creating-inspecting-and-deleting-collections) для правил именования |                         |                                  |
-| Chroma URL      | Укажите URL вашего экземпляра Chroma                                                                                                                    | <http://localhost:8000> | <https://api.trychroma.com:8000> |
+| Входные данные  | Описание                                                                | Значение по умолчанию   | Облако                           |
+| --------------- | ----------------------------------------------------------------------- | ----------------------- | -------------------------------- |
+| Document        | Можно подключать к узлам и [Загрузчик документов](../document-loaders/) |                         |                                  |
+| Embeddings      | Можно подключать к узлам из [Вложения](../embeddings/)                  |                         |                                  |
+| Collection Name | Название коллекции Chroma. Обратитесь сюда для правил именования        |                         |                                  |
+| Chroma URL      | Укажите URL вашего экземпляра Chroma                                    | <http://localhost:8000> | <https://api.trychroma.com:8000> |
 
-Для Chroma Cloud нужно получить ID арендатора, создать базу данных и API ключ
-
-![](/assets/image%20\(6\)%20\(1\)%20\(1\)%20\(1\)%20\(1\)%20\(2\)%20\(1\).png){width="238"}
+Для Chroma Cloud нужно получить ID арендатора, создать базу данных и API агента
 
 ### Дополнительные шаги
 
-Если вы запускаете OSMI и Chroma на Docker, необходимо выполнить дополнительные шаги.
+Если вы запускаете osmi\_ai и Chroma на Docker, необходимо выполнить дополнительные шаги.
 
 1. Запустите Docker контейнер Chroma
 
@@ -31,10 +29,10 @@
 docker compose up -d --build
 ```
 
-2. Откройте файл `docker-compose.yml` в папке OSMI
+2. Откройте файл `docker-compose.yml` в папке osmi\_ai
 
 ```bash
-cd OSMI && cd docker
+cd osmi_ai && cd docker
 ```
 
 3. Modify the file to:
@@ -43,32 +41,32 @@ cd OSMI && cd docker
 version: '3.1'
 
 services:
-    osmi:
-        image: osmi/osmi
+    osmi_ai:
+        image: osmi_ai/osmi_ai
         restart: always
         environment:
             - PORT=${PORT}
             - DEBUG=${DEBUG}
             - DATABASE_PATH=${DATABASE_PATH}
             - SECRETKEY_PATH=${SECRETKEY_PATH}
-            - FLOWISE_SECRETKEY_OVERWRITE=${OSMI_SECRETKEY_OVERWRITE}
+            - OSMI_AI_SECRETKEY_OVERWRITE=${osmi_ai_SECRETKEY_OVERWRITE}
             - LOG_PATH=${LOG_PATH}
             - LOG_LEVEL=${LOG_LEVEL}
             - EXECUTION_MODE=${EXECUTION_MODE}
         ports:
             - '${PORT}:${PORT}'
         volumes:
-            - ~/.osmi:/root/.osmi
+            - ~/.osmi_ai:/root/.osmi_ai
         networks:
-            - osmi_net
-        command: /bin/sh -c "sleep 3; osmi start"
+            - osmi_ai_net
+        command: /bin/sh -c "sleep 3; osmi_ai start"
 networks:
-    osmi_net:
+    osmi_ai_net:
         name: chroma_net
         external: true
 ```
 
-4. Запустите контейнер osmi
+4. Запустите контейнер osmi\_ai
 
 ```bash
 docker compose up -d
@@ -79,10 +77,3 @@ docker compose up -d
    <http://host.docker.internal:8000>
    Для Linux-систем, где host.docker.internal недоступен, используйте адрес Docker-шлюза, например:
    <http://172.17.0.1:8000>
-
-![](/assets/image%20\(5\)%20\(5\).png){width="256"}
-
-## Ресурсы
-
-- [LangChain JS Chroma](https://js.langchain.com/docs/modules/indexes/vector_stores/integrations/chroma)
-- [Chroma Getting Started](https://docs.trychroma.com/getting-started)

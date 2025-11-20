@@ -10,31 +10,34 @@ description: Upsert встроенных данных и выполнение п
 
 ### Требования
 
-1. Кластер Couchbase (Self Managed или Capella) версии 7.6+ с включенной [Search Service](https://docs.couchbase.com/server/current/search/search.html).
-2. Настройка Capella: Для подключения к кластеру Capella следуйте [инструкциям](https://docs.couchbase.com/cloud/get-started/connect.html?_gl=1*1yhpmel*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.).
-   - Создайте [учётные данные базы данных](https://docs.couchbase.com/cloud/clusters/manage-database-users.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) для доступа к кластеру..
-   - [Разрешите доступ](https://docs.couchbase.com/cloud/clusters/allow-ip-address.html?_gl=1*19zk7vq*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) к кластеру с IP-адреса, с которого запускается приложение.
-     :br-self Самостоятельная настройка::
-   - Следуйте параметрам установки [Couchbase Installation Options](https://developer.couchbase.com/tutorial-couchbase-installation-options) для установки последней версии сервера базы данных Couchbase. Обязательно добавьте службу поиска.
+1. Кластер Couchbase (Self Managed или Capella) версии 7.6+ с включенной Search Service.
+2. Настройка Capella: Для подключения к кластеру Capella следуйте инструкциям.
+   - Создайте учётные данные базы данных для доступа к кластеру..
+   - Разрешите доступ к кластеру с IP-адреса, с которого запускается приложение.
+
+Самостоятельная настройка:
+
+- Следуйте параметрам установки Couchbase Installation Options для установки последней версии сервера базы данных Couchbase. Обязательно добавьте службу поиска.
+
 3. Создайте поисковый индекс в разделе Search
 
 ### Импорт поискового индекса
 
-#### В [Couchbase Capella](\(https:/docs.couchbase.com/cloud/search/import-search-index.html)
+#### В Couchbase Capella
 
 - Скопируйте определение индекса в новый файл `index.json`.
 - Импортируйте файл согласно документации.
 - Нажмите Create Index для завершения.
 
-#### В [Couchbase Server](\(https:/docs.couchbase.com/server/current/search/import-search-index.html)
+#### В Couchbase Server
 
-Перейдите в Search → Add Index → Import.
+Перейдите в Поиск → Добавить индекс → Импорт.
 
 - Вставьте определение индекса.
-- Нажмите Create Index.
+- Нажмите Создать индекс.
 - Вы также можете создать векторный индекс через UI поиска на обоих платформах.
 
-You may also create a vector index using Search UI on both [Couchbase Capella](https://docs.couchbase.com/cloud/vector-search/create-vector-search-index-ui.html?_gl=1*1rglcpj*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.) and [Couchbase Self Managed Server](https://docs.couchbase.com/server/current/vector-search/create-vector-search-index-ui.html?_gl=1*t7aeet*_gcl_au*MTMzNDE3NTQxLjE3MzY5MjA5MzQ.).
+Вы также можете создать векторный индекс с помощью пользовательского интерфейса поиска как на Couchbase Capella, так и на Couchbase Self Managed Server.
 
 ### Определение индекса
 
@@ -132,28 +135,15 @@ You may also create a vector index using Search UI on both [Couchbase Capella](h
 - имя коллекции,
 - имя индекса.
 
-![](/assets/couchbase_1.png)
-
 2. Создайте новые учётные данные:
 
 - Couchbase Connection String
 - Cluster Username
 - Cluster Password
 
-![](/assets/couchbase_2.png)
-
 3. Добавьте новые узлы и запустите процесс upsert (обновление/вставка данных).
 
-- Связать документ можно с любым узлом из категории [**Document Loader**](../document-loaders/).
-- Связать **Embeddings** — с узлом из [**Embeddings** ](../embeddings/).
-
-![](/assets/couchbase_3.png)![](/assets/couchbase_4.png)
+- Связать документ можно с любым узлом из категории [**Загрузчик документов**](../document-loaders/).
+- Связать **Вложения** — с узлом из [**Вложения** ](../embeddings/).
 
 4. Перейдите в UI Couchbase и убедитесь, что данные успешно добавлены.
-
-## Ресурсы
-
-- Интеграции LangChain для Couchbase векторного хранилища
-  - [Python](https://python.langchain.com/docs/integrations/vectorstores/couchbase/)
-  - [NodeJS](https://js.langchain.com/docs/integrations/vectorstores/couchbase/)
-- Обратитесь к документации [Couchbase Documentation](https://docs.couchbase.com/home/index.html), чтобы ознакомиться с информацией о Couchbase.

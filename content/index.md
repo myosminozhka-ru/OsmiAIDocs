@@ -34,11 +34,11 @@ orientation: horizontal
 
   :::u-button
   ---
+  to: null
   color: neutral
   icon: i-simple-icons-github
   size: xl
   target: _blank
-  to:
   variant: outline
   ---
   Исходный код

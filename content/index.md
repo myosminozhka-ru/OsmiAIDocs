@@ -10,7 +10,7 @@ seo:
 class: dark:bg-gradient-to-b from-neutral-900 to-neutral-950
 orientation: horizontal
 ---
-![](https://823733684-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F00tYLwhz5RyR7fJEhrWy%2Fuploads%2FK5NWsHkLAelZq9sBlY8x%2FFlowiseIntro.gif?alt=media\&token=ea75ba7b-32fa-447d-8872-41fe5578fe1f)
+![](https://823733684-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F00tYLwhz5RyR7fJEhrWy%2Fuploads%2FK5NWsHkLAelZq9sBlY8x%2FFlowiseIntro.gif?alt=media&token=ea75ba7b-32fa-447d-8872-41fe5578fe1f)
 
 #top
   :::hero-background
@@ -38,7 +38,7 @@ orientation: horizontal
   icon: i-simple-icons-github
   size: xl
   target: _blank
-  to: https://github.com/myosminozhka-ru/StartAI/tree/translation
+  to:
   variant: outline
   ---
   Исходный код

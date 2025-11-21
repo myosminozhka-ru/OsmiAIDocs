@@ -25,12 +25,12 @@ export default defineAppConfig({
     search: true,
     colorMode: true,
     links: [
-      {
-        icon: "i-simple-icons-github",
-        to: "https://github.com/myosminozhka-ru/StartAI/tree/translation",
-        target: "_blank",
-        "aria-label": "GitHub",
-      },
+      // {
+      //   icon: "i-simple-icons-github",
+      //   to: "https://github.com/myosminozhka-ru/StartAI/tree/translation",
+      //   target: "_blank",
+      //   "aria-label": "GitHub",
+      // },
     ],
   },
   footer: {

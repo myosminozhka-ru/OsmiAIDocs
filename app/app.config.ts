@@ -49,12 +49,12 @@ export default defineAppConfig({
         target: "_blank",
         "aria-label": "Osmi on Telegram",
       },
-      {
-        icon: "i-simple-icons-github",
-        to: "https://github.com/myosminozhka-ru/StartAI/tree/translation",
-        target: "_blank",
-        "aria-label": "Osmi on GitHub",
-      },
+      // {
+      //   icon: "i-simple-icons-github",
+      //   to: "https://github.com/myosminozhka-ru/StartAI/tree/translation",
+      //   target: "_blank",
+      //   "aria-label": "Osmi on GitHub",
+      // },
     ],
   },
   toc: {
